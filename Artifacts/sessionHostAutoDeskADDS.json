@@ -430,7 +430,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/acapodilupo/WVD_Solution/master/WVD%20-%20July%20Updates/Scripts/ADDCCustomScript.ps1"
+                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/ADDCCustomScript.ps1"
                     ]
                 },
                 "protectedSettings": {
