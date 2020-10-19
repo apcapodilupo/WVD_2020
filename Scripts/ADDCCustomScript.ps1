@@ -20,7 +20,7 @@ Import-Module Az.Accounts -force
 sleep 5
 
 
-$Url = 'https://raw.githubusercontent.com/acapodilupo/WVD_Solution/master/WVD%20-%20July%20Updates/Scripts/JoinStorageAccount.zip'
+$Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
 Invoke-WebRequest -Uri $Url -OutFile "C:\JoinStorageAccount.zip"
 Expand-Archive -Path "C:\JoinStorageAccount.zip" -DestinationPath "C:\JoinStorageAccount" -Force 
 
