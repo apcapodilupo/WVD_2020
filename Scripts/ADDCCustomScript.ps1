@@ -32,7 +32,7 @@ $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userpro
 ##Install FSLOGIX Agent
 #sets execution policy to 'bypass' and installs chocolatey package manager
 #Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1?token=ARN6WUDF5HA6MBIYHY35STS7RXLJW'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 
 https://raw.githubusercontent.com/acapodilupo/WVD_Solution/master/DSC/chocolatey.0.10.15.nupkg
 
