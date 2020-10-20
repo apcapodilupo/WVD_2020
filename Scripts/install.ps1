@@ -30,6 +30,7 @@
 
 #use a different location to download the chocolatey nupkg file (anthony's github)
 $env:chocolateyDownloadUrl = 'https://raw.githubusercontent.com/acapodilupo/WVD_Solution/master/DSC/chocolatey.0.10.15.nupkg'
+                                       
 
 #specifically use the API to get the latest version (below)
 $url = ''
