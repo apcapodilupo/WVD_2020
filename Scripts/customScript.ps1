@@ -18,7 +18,7 @@ $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userpro
 #Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 
-https://raw.githubusercontent.com/acapodilupo/WVD_Solution/master/DSC/chocolatey.0.10.15.nupkg
+
 
 #installs fslogix apps 
 choco install fslogix -yes --ignore-checksums
