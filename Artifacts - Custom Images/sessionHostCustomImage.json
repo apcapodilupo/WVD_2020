@@ -311,9 +311,6 @@
                     "adminUsername": "[variables('existingDomainUsername')]",
                     "adminPassword": "[parameters('administratorAccountPassword')]"
                 },
-                "windowsConfiguration": {
-                    "provisionVmAgent": "true"
-                },
                 "storageProfile": {
                     "imageReference": {
                         "id": "[parameters('imageReferenceID')]"
