@@ -14,10 +14,10 @@ sleep 5
 
 #install AZ modules
 Install-Module -Name Az -force -AllowClobber
-sleep 5
+sleep 30
 
 Import-Module Az.Accounts -force 
-sleep 5
+sleep 30
 
 
 $Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
