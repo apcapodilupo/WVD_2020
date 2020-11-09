@@ -205,7 +205,7 @@
         }
     },
     "variables": {
-        "artifactsLocation": "https://raw.githubusercontent.com/acapodilupo/WVD_Solution/master/WVD%20v2%20(workspaces)/Atifacts/DSC/Configuration.zip",
+        "artifactsLocation": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_9-11-2020.zip",
         "existingDomainUsername": "[first(split(parameters('administratorAccountUsername'), '@'))]",
         "domain": "[if(equals(parameters('domain'), ''), last(split(parameters('administratorAccountUsername'), '@')), parameters('domain'))]",
         "storageAccountType": "[parameters('rdshVMDiskType')]",
