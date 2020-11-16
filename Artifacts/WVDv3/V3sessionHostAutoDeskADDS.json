@@ -481,6 +481,10 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                 }
+            },
+             "copy": {
+                "name": "additional-rdsh-AMD-GPU-loop",
+                "count": "[parameters('rdshNumberOfInstances')]"
             }
         }
     ],
