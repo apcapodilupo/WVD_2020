@@ -199,7 +199,7 @@
                 "description": "name of the storage account used"
             }
         }
-   },
+    },
     "variables": {
         "artifactsLocation": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_9-11-2020.zip",
         "existingDomainUsername": "[first(split(parameters('administratorAccountUsername'), '@'))]",
@@ -425,6 +425,7 @@
         {
 
             "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')),'/', 'nvidia-grid')]",
+            "condition": "[equals(variables('isNsv4'),false())]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2015-06-15",
             "location": "[parameters('location')]",
