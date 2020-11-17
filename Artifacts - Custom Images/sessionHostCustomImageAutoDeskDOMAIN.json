@@ -2,10 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        
-       "imageReferenceID": {
-           "type": "string"
-       },
+
+        "imageReferenceID": {
+            "type": "string"
+        },
         "rdshPrefix": {
             "defaultValue": "[take(toLower(resourceGroup().name),10)]",
             "type": "String",
@@ -55,14 +55,14 @@
                 "description": "The password that corresponds to the existing domain username."
             }
         },
-       
+
         "subnet-id": {
             "type": "String",
             "metadata": {
                 "description": "The unique id of the subnet for the nics."
             }
         },
-       
+
         "location": {
             "defaultValue": "",
             "type": "String",
@@ -199,8 +199,8 @@
                 "description": "name of the storage account used"
             }
         },
-           "appGroupName": {
-            "defaultValue":"",
+        "appGroupName": {
+            "defaultValue": "",
             "type": "string"
         }
     },
@@ -212,7 +212,8 @@
         "ResourceGroupName": "[resourceGroup().name]",
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
-        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ADDCCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', parameters('appGroupName'))]"
+        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ADDCCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', parameters('appGroupName'))]",
+        "isNsv4": "[contains(parameters('rdshVmSize'), 'v4')]"
     },
     "resources": [
         {
@@ -419,13 +420,13 @@
                     "commandToExecute": "[variables('commandToExecute')]"
                 }
             },
-             "copy": {
+            "copy": {
                 "name": "fslogix-profiles-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
             }
         },
         {
-            
+
             "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')),'/', 'nvidia-grid')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2015-06-15",
@@ -443,6 +444,28 @@
             },
             "copy": {
                 "name": "additional-rdsh-nvidia-grid-loop",
+                "count": "[parameters('rdshNumberOfInstances')]"
+            }
+        },
+        {
+            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')),'/', 'AMDDriver')]",
+            "condition": "[equals(variables('isNsv4'),true())]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "fslogix-profiles-loop"
+            ],
+            "properties": {
+                "publisher": "Microsoft.HpcCompute",
+                "type": "AmdGpuDriverWindows",
+                "typeHandlerVersion": "1.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                }
+            },
+            "copy": {
+                "name": "additional-rdsh-AMD-GPU-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
             }
         }
