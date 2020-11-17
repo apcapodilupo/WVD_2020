@@ -55,9 +55,11 @@ sleep 60
 New-ITEMPROPERTY 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name bEnumerateHWBeforeSW -Value 1
 sleep 10
 
+#sets AVC Encoding
 New-ITEMPROPERTY 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name AVCHardwareEncodePreferred -Value 1
 sleep 10
 
+#Full Screen Rendering
 New-ITEMPROPERTY 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name AVC444ModePreferred -Value 1
 sleep 10
 
