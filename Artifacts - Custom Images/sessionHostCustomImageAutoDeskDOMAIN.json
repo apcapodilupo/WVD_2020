@@ -214,7 +214,9 @@
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
         "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ADDCCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', parameters('appGroupName'))]",
-        "isNsv4": "[contains(parameters('rdshVmSize'), '_v4')]"
+        "isNsv4": "[contains(parameters('rdshVmSize'), '_v4')]",
+        "customScriptURI": "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/ADDCCustomScript.ps1",
+        "customScriptURI2": "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/Autodesk%20on%20WVDv3/ADDCCustomScript.ps1"
     },
     "resources": [
         {
@@ -414,7 +416,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/ADDCCustomScript.ps1"
+                        "[variables('customScriptURI2')]"
                     ]
                 },
                 "protectedSettings": {
