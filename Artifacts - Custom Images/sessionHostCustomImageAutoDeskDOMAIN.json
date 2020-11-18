@@ -206,6 +206,7 @@
     },
     "variables": {
         "artifactsLocation": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_9-11-2020.zip",
+        "artifactsLocation2": "https://github.com/apcapodilupo/WVD_2020/blob/main/DSC/Configuration.zip?raw=true",
         "existingDomainUsername": "[first(split(parameters('administratorAccountUsername'), '@'))]",
         "domain": "[if(equals(parameters('domain'), ''), last(split(parameters('administratorAccountUsername'), '@')), parameters('domain'))]",
         "storageAccountType": "[parameters('rdshVMDiskType')]",
@@ -384,7 +385,7 @@
                 "typeHandlerVersion": "2.73",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "modulesUrl": "[variables('artifactsLocation')]",
+                    "modulesUrl": "[variables('artifactsLocation2')]",
                     "configurationFunction": "Configuration.ps1\\AddSessionHost",
                     "properties": {
                         "hostPoolName": "[parameters('hostpoolName')]",
