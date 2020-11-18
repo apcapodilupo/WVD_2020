@@ -434,7 +434,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        
+                        "[variables('customScriptURI2')]"
                     ]
                 },
                 "protectedSettings": {
