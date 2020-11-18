@@ -406,7 +406,7 @@
                 "typeHandlerVersion": "2.73",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "modulesUrl": "[variables('artifactsLocation2')]",
+                    "modulesUrl": "[variables('artifactsLocation')]",
                     "configurationFunction": "Configuration.ps1\\AddSessionHost",
                     "properties": {
                         "hostPoolName": "[parameters('hostpoolName')]",
