@@ -228,7 +228,7 @@
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
         "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ADDCCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'))]",
-        "isNsv4": "[contains(parameters('rdshVmSize'), 'v4')]"
+        "isNsv4": "[contains(parameters('rdshVmSize'), '_v4')]"
     },
     "resources": [
         {
