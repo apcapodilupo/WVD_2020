@@ -312,10 +312,7 @@
                 "osProfile": {
                     "computerName": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')))]",
                     "adminUsername": "[variables('existingDomainUsername')]",
-                    "adminPassword": "[parameters('administratorAccountPassword')]",
-                    "windowsConfiguration": {
-                        "provisionVMAgent": false
-                    }
+                    "adminPassword": "[parameters('administratorAccountPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
