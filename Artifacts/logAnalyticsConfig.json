@@ -18,7 +18,8 @@
         "settingName": "HostPool-Diag",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
 
-        "extensionNames": [ "MicrosoftMonitoringAgent" ]
+        "extensionNames": [ "MicrosoftMonitoringAgent" ],
+        "perfCounterName": "[concat('performanceCounters-',variables('workspaceName'))]"
 
     },
     "resources": [
@@ -72,7 +73,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
             ],
-            "name": "[concat('performanceCounters-',variables('workspaceName'))]",
+            "name": "[variables('perfCounterName')]",
             "location": "[variables('location')]",
             "resources": [
                 {
@@ -80,7 +81,7 @@
                     "type": "datasources",
                     "name": "sampleWindowsEvent1",
                     "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('perfCounterName'))]"
                     ],
                     "kind": "WindowsEvent",
                     "properties": {
