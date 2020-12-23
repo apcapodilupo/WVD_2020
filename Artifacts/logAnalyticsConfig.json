@@ -5,10 +5,6 @@
 
         "hostpoolName": {
             "type": "string"
-        },
-
-        "virtualMachines": {
-            "type": "Array"
         }
 
     },
@@ -475,32 +471,7 @@
                     }
                 }
             ]
-        },
-        {
-            "apiVersion": "2018-10-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('virtualMachines')[copyIndex()],'/',variables('extensionNames')[copyIndex()])]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
-            ],
-
-            "copy": {
-                "name": "vmextensioncopy",
-                "count": "[length(parameters('virtualMachines'))]"
-            },
-            "properties": {
-                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                "type": "MicrosoftMonitoringAgent",
-                "typeHandlerVersion": "1.0",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "workspaceId": "[variables('workspaceId')]"
-                },
-                "protectedSettings": {
-                    "workspaceKey": "[listKeys(variables('workspaceId'), '2015-11-01-preview').primarySharedKey]"
-                }
-            }
         }
+        
     ]
 }
