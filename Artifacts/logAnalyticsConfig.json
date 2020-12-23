@@ -25,7 +25,7 @@
         {
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2017-03-15-preview",
-            "name": "[variables('workspaceName')]",
+            "name": "wvdMonitorTD",
             "location": "[variables('location')]",
             "properties": {
                 "sku": {
@@ -36,6 +36,9 @@
         {
             "type": "Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
+            ],
             "name": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]",
             "properties": {
                 "workspaceId": "[variables('workspaceId')]",
@@ -66,13 +69,19 @@
         {
             "apiVersion": "2017-03-15-preview",
             "type": "Microsoft.OperationalInsights/workspaces",
-            "name": "[variables('workspaceName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
+            ],
+            "name": "[concat('performanceCounters-',variables('workspaceName'))]",
             "location": "[variables('location')]",
             "resources": [
                 {
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "sampleWindowsEvent1",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsEvent",
                     "properties": {
                         "eventLogName": "Application",
@@ -90,6 +99,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter1",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "LogicalDisk",
@@ -102,6 +114,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter2",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "LogicalDisk",
@@ -114,6 +129,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter3",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "LogicalDisk",
@@ -126,6 +144,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter4",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "LogicalDisk",
@@ -138,6 +159,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter5",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Memory",
@@ -150,6 +174,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter6",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Memory",
@@ -162,6 +189,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter7",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Memory",
@@ -174,6 +204,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter8",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Memory",
@@ -186,6 +219,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter9",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "PhysicalDisk",
@@ -198,6 +234,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter10",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "PhysicalDisk",
@@ -210,6 +249,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter11",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "PhysicalDisk",
@@ -222,6 +264,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter12",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "PhysicalDisk",
@@ -234,6 +279,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter13",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Process",
@@ -246,6 +294,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter14",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Process",
@@ -258,6 +309,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter15",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Process",
@@ -270,6 +324,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter16",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Process",
@@ -282,6 +339,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter17",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Process",
@@ -294,6 +354,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter18",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Processor Information",
@@ -306,6 +369,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter19",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Terminal Services",
@@ -318,6 +384,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter20",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Terminal Services",
@@ -330,6 +399,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter21",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "Terminal Services",
@@ -342,6 +414,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter22",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "User Input Delay per Process",
@@ -354,6 +429,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter23",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "User Input Delay per Session",
@@ -366,6 +444,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter24",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "RemoteFX Network",
@@ -378,6 +459,9 @@
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
                     "name": "perfcounter25",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
                         "objectName": "RemoteFX Network",
