@@ -36,9 +36,6 @@
         {
             "type": "Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
-            "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
-            ],
             "name": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]",
             "properties": {
                 "workspaceId": "[variables('workspaceId')]",
@@ -69,9 +66,6 @@
         {
             "apiVersion": "2017-03-15-preview",
             "type": "Microsoft.OperationalInsights/workspaces",
-            "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
-            ],
             "name": "[variables('workspaceName')]",
             "location": "[variables('location')]",
             "resources": [
