@@ -100,7 +100,7 @@ if ($installTeams -eq 'Yes'){
     sleep 5
 
     # Install Teams
-    msiexec /i "C:\Install\Teams_windows_x64.msi" /l*v c:\Teams.log ALLUSER=1 ALLUSERS=1 
+    msiexec /i "C:\Install\Teams_windows_x64.msi" /l*v c:\Install\Teams.log ALLUSER=1 ALLUSERS=1 
     sleep 5
 
 }
