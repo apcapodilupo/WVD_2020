@@ -20,10 +20,6 @@
             }
         },
         "rdshVMDiskType": {
-            "allowedValues": [
-                "Premium_LRS",
-                "Standard_LRS"
-            ],
             "type": "String",
             "metadata": {
                 "description": "The VM disk type for the VM: HDD or SSD."
