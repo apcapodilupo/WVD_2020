@@ -22,7 +22,8 @@
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
 
         "extensionNames": [ "MicrosoftMonitoringAgent" ],
-        "perfCounterName": "[concat('performanceCounters-',variables('workspaceName'))]"
+        "perfCounterName": "[concat('performanceCounters-',variables('workspaceName'))]",
+        "diagnosticName": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
 
     },
     "resources": [
@@ -73,7 +74,7 @@
         {
             "apiVersion": "2017-03-15-preview",
             "dependsOn": [
-                "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
+               "[resourceId('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings', variables('diagnosticName'))]"
             ],
 
             "type": "Microsoft.OperationalInsights/workspaces",
