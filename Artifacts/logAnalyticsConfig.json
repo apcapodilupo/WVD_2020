@@ -19,7 +19,7 @@
         "workspaceName": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
         "sku": "pergb2018",
         "settingName": "HostPool-Diag",
-        "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
+        "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]"
     },
     "resources": [
         {
@@ -68,7 +68,6 @@
         },
         {
             "apiVersion": "2017-03-15-preview",
-
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[parameters('workspaceName')]",
             "location": "[variables('location')]",
@@ -470,6 +469,7 @@
                 }
             ]
         }
+        
 
 
     ]
