@@ -23,7 +23,7 @@
 
         "extensionNames": [ "MicrosoftMonitoringAgent" ],
         "perfCounterName": "[concat('performanceCounters-',variables('workspaceName'))]",
-        "diagnosticName": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
+        "diagnosticName": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/')]"
 
     },
     "resources": [
@@ -74,7 +74,7 @@
         {
             "apiVersion": "2017-03-15-preview",
             "dependsOn": [
-               "[resourceId('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings', variables('diagnosticName'))]"
+               "[resourceId('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings', variables('diagnosticName'),variables('settingName') )]"
             ],
 
             "type": "Microsoft.OperationalInsights/workspaces",
