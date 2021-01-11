@@ -20,11 +20,6 @@
         "sku": "pergb2018",
         "settingName": "HostPool-Diag",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
-
-        "extensionNames": [ "MicrosoftMonitoringAgent" ],
-        "perfCounterName": "[concat('performanceCounters-',variables('workspaceName'))]",
-        "diagnosticName": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/')]"
-
     },
     "resources": [
         {
@@ -73,9 +68,6 @@
         },
         {
             "apiVersion": "2017-03-15-preview",
-            "dependsOn": [
-               "[resourceId('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings', variables('diagnosticName'),variables('settingName') )]"
-            ],
 
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[parameters('workspaceName')]",
