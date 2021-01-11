@@ -6,7 +6,7 @@
         "hostpoolName": {
             "type": "string"
         },
-        "workspaceName":{
+        "workspaceName": {
             "type": "string"
         }
 
@@ -72,6 +72,10 @@
         },
         {
             "apiVersion": "2017-03-15-preview",
+            "dependsOn": [
+                "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
+            ],
+
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[parameters('workspaceName')]",
             "location": "[variables('location')]",
@@ -473,7 +477,7 @@
                 }
             ]
         }
-        
-        
+
+
     ]
 }
