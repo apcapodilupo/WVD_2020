@@ -5,6 +5,9 @@
 
         "hostpoolName": {
             "type": "string"
+        },
+        "virtualMachines": {
+            "type": "array"
         }
 
     },
@@ -490,8 +493,5 @@
                 }
             }
         }
-        
-
-
     ]
 }
