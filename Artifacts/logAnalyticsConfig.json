@@ -17,7 +17,7 @@
         "location": "[resourceGroup().location]",
 
         "workspaceName": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
-        "workspaceConfig": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
+        "perfcounterConfig": "[concat( 'perfCoutner-',uniquestring(resourceGroup().id))]",
 
         "sku": "pergb2018",
         "settingName": "HostPool-Diag",
@@ -73,7 +73,7 @@
         {
             "apiVersion": "2017-03-15-preview",
             "type": "Microsoft.OperationalInsights/workspaces",
-            "name": "[variables('workspaceConfig')]",
+            "name": "[variables('perfcounterConfig')]",
             "location": "[variables('location')]",
             "resources": [
                 {
