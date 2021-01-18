@@ -22,7 +22,7 @@
         "sku": "pergb2018",
         "settingName": "HostPool-Diag",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
-        "extensionNames": ["MicrosoftMonitoringAgent", "OMSExtenstion"]
+        "extensionNames": ["MicrosoftMonitoringAgent"]
     },
     "resources": [
         {
