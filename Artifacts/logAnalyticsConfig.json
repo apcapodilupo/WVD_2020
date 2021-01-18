@@ -7,7 +7,7 @@
             "type": "string"
         },
          "virtualMachines": {
-            "type": "array"
+            "type": "object"
         }   
 
     },
