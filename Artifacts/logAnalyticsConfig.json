@@ -8,7 +8,7 @@
         },
 
         "rdshNumberOfInstances":{
-            "defaultvalue": 0,
+            "defaultvalue": 1,
             "type": "int"
         },
 
