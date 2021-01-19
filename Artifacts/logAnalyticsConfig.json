@@ -7,8 +7,13 @@
             "type": "string"
         },
 
-        "virtualMachines": {
-            "type": "array"
+        "rdshNumberOfInstances":{
+            "defaultvalue": 1,
+            "type": "int"
+        },
+        
+        "rdshNamePrefix":{
+            "type": "string"
         }
 
     },
@@ -23,8 +28,15 @@
         "sku": "pergb2018",
         "settingName": "HostPool-Diag",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
-        "extensionNames": ["OMSExtenstion"],
-        "vmInitialNumber": 0
+        "extensionNames": [ "OMSExtenstion" ],
+        "copy": [
+            {
+                "name": "vmNames",
+                "count": "[parameters('rdshNumberOfInstances')]",
+                "input": "[concat(parameters('rdshNamePrefix'),'-', copyIndex('vmNames', 0))]"
+            }
+        ]
+
     },
     "resources": [
         {
@@ -477,11 +489,11 @@
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('virtualMachines')[copyIndex()],'/',variables('extensionNames')[copyIndex()])]",          
+            "name": "[concat(variables('vmNames')[copyIndex()],'/',variables('extensionNames')[copyIndex()])]",
             "location": "[variables('location')]",
             "copy": {
                 "name": "vmextensioncopy",
-                "count": "[length(parameters('virtualMachines'))]"
+                "count": "[length(variables('vmNames'))]"
             },
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
