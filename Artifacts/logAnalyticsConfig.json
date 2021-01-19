@@ -477,7 +477,7 @@
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('virtualMachines'), add(copyindex(), variables('vmInitialNumber')), '/OMSExtension')]",        
+            "name": "[concat( 'SH-', add(copyindex(), variables('vmInitialNumber')), '/OMSExtension')]",        
             "location": "[variables('location')]",
             "copy": {
                 "name": "vmextensioncopy",
