@@ -8,10 +8,10 @@
         },
 
         "rdshNumberOfInstances":{
-            "defaultvalue": 1,
+            "defaultvalue": 0,
             "type": "int"
         },
-        
+
         "rdshNamePrefix":{
             "type": "string"
         }
