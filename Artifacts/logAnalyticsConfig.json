@@ -22,7 +22,8 @@
         "perfcounterConfig": "[concat( 'perfCoutner-',uniquestring(resourceGroup().id))]",
         "settingName": "HostPool-Diag",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',parameters('workspaceName'))]",
-        "extensionNames": [ "OMSExtenstion" ]
+        "extensionNames": [ "OMSExtenstion" ],
+        "vmInitialNumber": 0
 
     },
     "resources": [
@@ -466,7 +467,7 @@
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('workspaceName'), '/', 'installOMSAgent')]",
+            "name": "[concat(parameters('workspaceName'), '-', add(copyindex(), variables('vmInitialNumber')),'/', 'installOMSAgent')]",
             "condition": "[greater(length(parameters('vmNames')), 0)]",
             "location": "[variables('location')]",
             "copy": {
