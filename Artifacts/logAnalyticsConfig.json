@@ -6,11 +6,11 @@
         "hostpoolName": {
             "type": "string"
         },
-        
-        "vmNames":{
+
+        "vmNames": {
             "type": "array"
         },
-        "workspaceName":{
+        "workspaceName": {
             "type": "string"
         }
 
@@ -26,7 +26,7 @@
 
     },
     "resources": [
-        
+
         {
             "type": "Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
@@ -463,11 +463,12 @@
                 }
             ]
         },
-    
+
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmNames')[copyIndex()],'/',variables('extensionNames')[copyIndex()])]",
+            "condition": "[greater(length(parameters('vmNames')), 0)]",
             "location": "[variables('location')]",
             "copy": {
                 "name": "vmextensioncopy",
