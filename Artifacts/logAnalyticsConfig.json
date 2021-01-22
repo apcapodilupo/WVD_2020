@@ -21,7 +21,7 @@
         "location": "[resourceGroup().location]",
         "perfcounterConfig": "[concat( 'perfCoutner-',uniquestring(resourceGroup().id))]",
         "settingName": "HostPool-Diag",
-        "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
+        "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',parameters('workspaceName'))]",
         "extensionNames": [ "OMSExtenstion" ]
 
     },
@@ -31,7 +31,7 @@
             "type": "Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
             ],
             "name": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]",
             "properties": {
