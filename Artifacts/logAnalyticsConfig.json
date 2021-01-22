@@ -9,6 +9,9 @@
         
         "vmNames":{
             "type": "array"
+        },
+        "monitorName":{
+            "type": "string"
         }
 
     },
@@ -16,28 +19,14 @@
         "subscriptionID": "[subscription().subscriptionId]",
         "resourceGroupName": "[resourceGroup().name]",
         "location": "[resourceGroup().location]",
-
-        "workspaceName": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
         "perfcounterConfig": "[concat( 'perfCoutner-',uniquestring(resourceGroup().id))]",
-
-        "sku": "pergb2018",
         "settingName": "HostPool-Diag",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
         "extensionNames": [ "OMSExtenstion" ]
 
     },
     "resources": [
-        {
-            "type": "Microsoft.OperationalInsights/workspaces",
-            "apiVersion": "2017-03-15-preview",
-            "name": "[variables('workspaceName')]",
-            "location": "[variables('location')]",
-            "properties": {
-                "sku": {
-                    "name": "[variables('sku')]"
-                }
-            }
-        },
+        
         {
             "type": "Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
@@ -490,7 +479,7 @@
                 "typeHandlerVersion": "1.0",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName')), '2017-03-15-preview').customerId]"
+                    "workspaceId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('monitorName')), '2017-03-15-preview').customerId]"
                 },
                 "protectedSettings": {
                     "workspaceKey": "[listKeys(variables('workspaceId'), '2015-11-01-preview').primarySharedKey]"
