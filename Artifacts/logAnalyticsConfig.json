@@ -10,7 +10,7 @@
         "vmNames":{
             "type": "array"
         },
-        "monitorName":{
+        "workspaceName":{
             "type": "string"
         }
 
