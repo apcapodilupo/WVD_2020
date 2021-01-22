@@ -13,6 +13,7 @@
         },
 
         "rdshNamePrefix":{
+            "defaultvalue": "defaultSH",
             "type": "string"
         }
 
