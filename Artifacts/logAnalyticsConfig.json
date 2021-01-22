@@ -466,7 +466,7 @@
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmNames')[copyIndex()],'/',variables('extensionNames')[copyIndex()])]",
+            "name": "[concat(parameters('vmNames')[copyIndex(0)],'/',variables('extensionNames')[copyIndex(0)])]",
             "condition": "[greater(length(parameters('vmNames')), 0)]",
             "location": "[variables('location')]",
             "copy": {
