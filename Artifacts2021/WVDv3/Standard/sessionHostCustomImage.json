@@ -415,7 +415,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/customScript.ps1"
+                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Artifacts2021/Scripts/customScript.ps1"
                     ]
                 },
                 "protectedSettings": {
