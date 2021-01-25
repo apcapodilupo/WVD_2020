@@ -53,22 +53,6 @@ New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyTyp
 sleep 10
 
 
-#Add Defender Exclusions for FSLogix
-powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrv.sys’"
-powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrvvt.sys’"
-powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxccd.sys’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%TEMP%\*.VHD’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%TEMP%\*.VHDX’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%Windir%\*.VHD’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%Windir%\*.VHDX’"
-powershell -Command "Add-MpPreference -ExclusionExtension '\\gcrwvduserprofiles.file.core.windows.net\userprofiles\*\*.*.VHDX’"
-powershell -Command "Add-MpPreference -ExclusionExtension '\\gcrwvduserprofiles.file.core.windows.net\userprofiles\*\*.*.VHD’"
-powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxccd.exe’"
-powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxccds.exe’"
-powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxsvc.exe’"
-
-
-
 
 if ($installTeams -eq 'Yes'){
 
