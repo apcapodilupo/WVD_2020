@@ -2,10 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        
-       "imageReferenceID": {
-           "type": "string"
-       },
+
+        "imageReferenceID": {
+            "type": "string"
+        },
         "rdshPrefix": {
             "defaultValue": "[take(toLower(resourceGroup().name),10)]",
             "type": "String",
@@ -51,14 +51,14 @@
                 "description": "The password that corresponds to the existing domain username."
             }
         },
-       
+
         "subnet-id": {
             "type": "String",
             "metadata": {
                 "description": "The unique id of the subnet for the nics."
             }
         },
-       
+
         "location": {
             "defaultValue": "",
             "type": "String",
@@ -195,10 +195,15 @@
                 "description": "name of the storage account used"
             }
         },
-         "appGroupName": {
-            "defaultValue":"",
+        "appGroupName": {
+            "defaultValue": "",
+            "type": "string"
+        },
+        "installTeams": {
+            "defaultValue": "Yes",
             "type": "string"
         }
+
     },
     "variables": {
 
@@ -417,12 +422,12 @@
                     "commandToExecute": "[variables('commandToExecute')]"
                 }
             },
-             "copy": {
+            "copy": {
                 "name": "fslogix-profiles-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
             }
         }
-        
+
     ],
     "outputs": {}
 }

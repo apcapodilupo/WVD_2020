@@ -216,6 +216,10 @@
             "metadata": {
                 "description": "name of the storage account used"
             }
+        },
+        "installTeams": {
+            "defaultValue":"Yes",
+            "type": "string"
         }
     },
     "variables": {
