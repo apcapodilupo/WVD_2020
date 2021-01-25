@@ -215,7 +215,7 @@
         "subscriptionID": "[subscription().subscriptionId]",
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
-        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File customScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'))]",
+        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File customScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'),' ', parameters('installTeams'))]"
     },
     "resources": [
         {
