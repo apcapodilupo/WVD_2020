@@ -224,7 +224,7 @@
     },
     "variables": {
         
-         "artifactsLocation": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_9-11-2020.zip",
+        "artifactsLocation": "https://github.com/apcapodilupo/WVD_2020/blob/main/Artifacts2021/Scripts/DSC/Configuration_9-11-2020.zip?raw=true",
         "existingDomainUsername":"[first(split(parameters('administratorAccountUsername'), '@'))]",
         "domain": "[if(equals(parameters('domain'), ''), last(split(parameters('administratorAccountUsername'), '@')), parameters('domain'))]",
         "storageAccountType": "[parameters('rdshVMDiskType')]",
@@ -435,7 +435,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/ADDCCustomScript.ps1"
+                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Artifacts2021/Scripts/CustomScriptDOMAIN.ps1"
                     ]
                 },
                 "protectedSettings": {
