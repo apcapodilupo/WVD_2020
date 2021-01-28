@@ -207,17 +207,17 @@
 
     },
     "variables": {
-        "artifactsLocation": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_9-11-2020.zip",
-        "artifactsLocation2": "https://github.com/apcapodilupo/WVD_2020/blob/main/DSC/Configuration.zip?raw=true",
+        "artifactsLocation": "https://github.com/apcapodilupo/WVD_2020/blob/main/Artifacts2021/Scripts/DSC/Configuration_9-11-2020.zip?raw=true",
+        "artifactsLocation2": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_9-11-2020.zip",
         "existingDomainUsername": "[first(split(parameters('administratorAccountUsername'), '@'))]",
         "domain": "[if(equals(parameters('domain'), ''), last(split(parameters('administratorAccountUsername'), '@')), parameters('domain'))]",
         "storageAccountType": "[parameters('rdshVMDiskType')]",
         "ResourceGroupName": "[resourceGroup().name]",
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
-        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ADDCCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'), ' ', parameters('installTeams'))]",
+        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File autodeskCustomScriptDOMAIN.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'), ' ', parameters('installTeams'))]",
         "isNsv4": "[contains(parameters('rdshVmSize'), '_v4')]",
-        "customScriptURI": "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/ADDCCustomScript.ps1"
+        "customScriptURI": "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Artifacts2021/Scripts/autodeskCustomScriptDOMAIN.ps1"
     },
     "resources": [
         {
