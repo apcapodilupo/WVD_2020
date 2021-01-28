@@ -213,6 +213,7 @@
         "domain": "[if(equals(parameters('domain'), ''), last(split(parameters('administratorAccountUsername'), '@')), parameters('domain'))]",
         "storageAccountType": "[parameters('rdshVMDiskType')]",
         "ResourceGroupName": "[resourceGroup().name]",
+        "subscriptionID": "[subscription().subscriptionId]",
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
         "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File autodeskCustomScriptDOMAIN.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'), ' ', parameters('installTeams'))]",
