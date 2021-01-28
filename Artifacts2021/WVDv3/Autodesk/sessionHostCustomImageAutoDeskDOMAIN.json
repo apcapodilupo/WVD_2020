@@ -198,7 +198,13 @@
         "appGroupName": {
             "defaultValue": "",
             "type": "string"
+        },
+        "installTeams": {
+            "defaultValue": "",
+            "type": "String"
         }
+
+
     },
     "variables": {
         "artifactsLocation": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_9-11-2020.zip",
@@ -209,10 +215,9 @@
         "ResourceGroupName": "[resourceGroup().name]",
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
-        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ADDCCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', parameters('appGroupName'))]",
+        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ADDCCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'), ' ', parameters('installTeams'))]",
         "isNsv4": "[contains(parameters('rdshVmSize'), '_v4')]",
-        "customScriptURI": "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/ADDCCustomScript.ps1",
-        "customScriptURI2": "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/Autodesk%20on%20WVDv3/ADDCCustomScript.ps1"
+        "customScriptURI": "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/ADDCCustomScript.ps1"
     },
     "resources": [
         {
