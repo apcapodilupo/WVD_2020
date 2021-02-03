@@ -27,8 +27,7 @@
         "perfcounterConfig": "[concat( 'perfCoutner-',uniquestring(resourceGroup().id))]",
         "settingName": "HostPool-Diag",
         "workspaceName": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
-        "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',parameters('workspaceName'))]",
-        "extensionNames": [ "OMSExtenstion" ],
+        "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
         "vmInitialNumber": 0
 
     },
