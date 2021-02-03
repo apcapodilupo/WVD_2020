@@ -479,7 +479,7 @@
             "location": "[variables('location')]",
             "copy": {
                 "name": "vmextensioncopy",
-                "count": "[length(parameters('rdshNumberOfInstances'))]"
+                "count": "[parameters('rdshNumberOfInstances')]"
             },
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
