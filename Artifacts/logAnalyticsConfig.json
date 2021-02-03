@@ -462,11 +462,12 @@
                 }
             ]
         },
-
+        
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmNames')[copyIndex()],'/',variables('extensionNames')[copyIndex()])]",
+            "name": "[concat(parameters('workspaceName'), '-', add(copyindex(), variables('vmInitialNumber')),'/', 'installOMSAgent')]",
+            "condition": "[greater(length(parameters('vmNames')), 0)]",
             "location": "[variables('location')]",
             "copy": {
                 "name": "vmextensioncopy",
