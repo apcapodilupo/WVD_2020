@@ -13,9 +13,14 @@
         "workspaceName": {
             "defaultvalue": "test",
             "type": "string"
-        }
+        },
 
+        "rdshPrefix": {
+            "defaultValue": "[take(toLower(resourceGroup().name),10)]",
+            "type": "String"
+        }
     },
+
     "variables": {
         "subscriptionID": "[subscription().subscriptionId]",
         "resourceGroupName": "[resourceGroup().name]",
@@ -462,12 +467,11 @@
                 }
             ]
         },
-        
+
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('workspaceName'), '/', 'installOMSAgent')]",
-            "condition": "[greater(length(parameters('vmNames')), 0)]",
+            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), variables('vmInitialNumber')), '/', 'installOMSAgent')]",
             "location": "[variables('location')]",
             "copy": {
                 "name": "vmextensioncopy",
