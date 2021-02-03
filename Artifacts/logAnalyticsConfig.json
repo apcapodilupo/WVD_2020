@@ -14,7 +14,6 @@
             "defaultvalue": "test",
             "type": "string"
         }
-        
 
     },
     "variables": {
@@ -463,12 +462,17 @@
                 }
             ]
         },
-
+        
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('workspaceName'), '/', variables('extensionNames')[copyIndex()])]",
+            "name": "[concat(parameters('workspaceName'), '/', 'installOMSAgent')]",
+            "condition": "[greater(length(parameters('vmNames')), 0)]",
             "location": "[variables('location')]",
+            "copy": {
+                "name": "vmextensioncopy",
+                "count": "[length(parameters('vmNames'))]"
+            },
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                 "type": "MicrosoftMonitoringAgent",
@@ -480,13 +484,7 @@
                 "protectedSettings": {
                     "workspaceKey": "[listKeys(variables('workspaceId'), '2015-11-01-preview').primarySharedKey]"
                 }
-            },
-            "copy": {
-                "name": "vmextensioncopy",
-                "count": "[length(parameters('vmNames'))]"
             }
-
-
         }
     ]
 }
