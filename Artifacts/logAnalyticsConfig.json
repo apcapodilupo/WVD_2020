@@ -10,11 +10,6 @@
         "vmNames": {
             "type": "array"
         },
-        "workspaceName": {
-            "defaultvalue": "test",
-            "type": "string"
-        },
-
         "rdshPrefix": {
             "defaultValue": "[take(toLower(resourceGroup().name),10)]",
             "type": "String"
@@ -31,6 +26,7 @@
         "location": "[resourceGroup().location]",
         "perfcounterConfig": "[concat( 'perfCoutner-',uniquestring(resourceGroup().id))]",
         "settingName": "HostPool-Diag",
+        "workspaceName": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',parameters('workspaceName'))]",
         "extensionNames": [ "OMSExtenstion" ],
         "vmInitialNumber": 0
@@ -71,8 +67,11 @@
         {
             "apiVersion": "2017-03-15-preview",
             "type": "Microsoft.OperationalInsights/workspaces",
-            "name": "[variables('perfcounterConfig')]",
+            "name": "[variables('workspaceName')]",
             "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings/', parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
+            ],
             "resources": [
                 {
                     "apiVersion": "2015-11-01-preview",
@@ -477,6 +476,10 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('rdshPrefix'), add(copyindex(), variables('vmInitialNumber')), '/', 'installOMSAgent')]",
             "location": "[variables('location')]",
+            "dependsOn": [
+
+                "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+            ],
             "copy": {
                 "name": "vmextensioncopy",
                 "count": "[parameters('rdshNumberOfInstances')]"
