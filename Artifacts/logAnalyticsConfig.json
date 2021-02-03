@@ -18,6 +18,12 @@
         "rdshPrefix": {
             "defaultValue": "[take(toLower(resourceGroup().name),10)]",
             "type": "String"
+        },
+        "rdshNumberOfInstances": {
+            "type": "Int",
+            "metadata": {
+                "description": "Number of session hosts that will be created and added to the hostpool."
+            }
         }
     },
 
@@ -475,7 +481,7 @@
             "location": "[variables('location')]",
             "copy": {
                 "name": "vmextensioncopy",
-                "count": "[length(parameters('vmNames'))]"
+                "count": "[length(parameters('rdshNumberOfInstances'))]"
             },
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
