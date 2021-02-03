@@ -68,7 +68,7 @@
             "name": "[variables('workspaceName')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[concat('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings', parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
+                "[concat('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings/', parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
             ],
 
             "resources": [
