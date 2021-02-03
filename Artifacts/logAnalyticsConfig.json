@@ -469,10 +469,6 @@
             "name": "[concat(parameters('workspaceName'), '/', variables('extensionNames')[copyIndex()])]",
             "condition": "[greater(length(parameters('vmNames')), 0)]",
             "location": "[variables('location')]",
-            "copy": {
-                "name": "vmextensioncopy",
-                "count": "[length(parameters('vmNames'))]"
-            },
             "properties": {
                 "publisher": "Microsoft.EnterpriseCloud.Monitoring",
                 "type": "MicrosoftMonitoringAgent",
@@ -484,7 +480,13 @@
                 "protectedSettings": {
                     "workspaceKey": "[listKeys(variables('workspaceId'), '2015-11-01-preview').primarySharedKey]"
                 }
+            },
+                        "copy": {
+                "name": "vmextensioncopy",
+                "count": "[length(parameters('vmNames'))]"
             }
+
+            
         }
     ]
 }
