@@ -24,7 +24,6 @@
         "subscriptionID": "[subscription().subscriptionId]",
         "resourceGroupName": "[resourceGroup().name]",
         "location": "[resourceGroup().location]",
-
         "settingName": "HostPool-Diag",
         "workspaceName": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
@@ -68,6 +67,10 @@
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('workspaceName')]",
             "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings', parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]"
+            ],
+
             "resources": [
                 {
                     "apiVersion": "2015-11-01-preview",
@@ -553,7 +556,7 @@
                         ]
                     }
                 },
-                                {
+                {
                     "type": "datasources",
                     "apiVersion": "2020-08-01",
                     "name": "FSLogixAppsAdmin",
