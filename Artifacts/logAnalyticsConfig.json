@@ -7,9 +7,6 @@
             "type": "string"
         },
 
-        "vmNames": {
-            "type": "array"
-        },
         "rdshPrefix": {
             "defaultValue": "[take(toLower(resourceGroup().name),10)]",
             "type": "String"
@@ -548,7 +545,6 @@
 
             ]
         },
-
         {
             "type": "Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
@@ -582,7 +578,6 @@
                 ]
             }
         },
-
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
