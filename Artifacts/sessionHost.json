@@ -418,7 +418,7 @@
         {
             "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'installcustomscript')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2019-07-01",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "rdsh-dsc-loop"
