@@ -73,7 +73,7 @@ if ($installTeams -eq 'Yes'){
     sleep 5
 
     #Download Teams 
-    invoke-WebRequest -Uri https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.134461/Teams_windows_x64.msi -OutFile "C:\Install\Teams_windows_x64.msi"
+    invoke-WebRequest -Uri https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.13565/Teams_windows_x64.msi -OutFile "C:\Install\Teams_windows_x64.msi"
     sleep 5
 
     #Install C++ runtime
