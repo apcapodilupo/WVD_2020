@@ -20,7 +20,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.We
 
 
 #installs fslogix apps 
-choco install fslogix -yes --ignore-checksums
+choco install fslogix -yes --ignore-checksums  
 
 sleep 10
 
@@ -89,3 +89,5 @@ if ($installTeams -eq 'Yes'){
     sleep 5
 
 }
+
+exit 0
