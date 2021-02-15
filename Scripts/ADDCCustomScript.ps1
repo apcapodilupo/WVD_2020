@@ -51,7 +51,6 @@ sleep 10
 
 #configure fslogix profile containers
 
-
 #create profiles key
 New-Item 'HKLM:\Software\FSLogix\Profiles' -Force 
 sleep 10
