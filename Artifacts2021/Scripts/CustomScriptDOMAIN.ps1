@@ -8,19 +8,18 @@
 
   )
  
-
-
-$MyLastExitCode = $LastExitCode
+#set the code to 0 (this will change if there are errors.)
+$LASTEXITCODE = 0
 
 #create directory for log file
 New-Item -ItemType "directory" -Path C:\DeploymentLogs
 sleep 5
 
 #create Log File
-New-Item C:\DeploymentLogs\log.txt
+New-Item C:\DeploymentLogs\log3.txt
 sleep 5 
 
-Set-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $MyLastExitCode"
+Set-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $LASTEXITCODE"
 
 #set execution policy
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
