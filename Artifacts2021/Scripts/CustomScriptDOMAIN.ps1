@@ -8,6 +8,19 @@
 
   )
  
+
+
+$MyLastExitCode = $LastExitCode
+
+#create directory for log file
+New-Item -ItemType "directory" -Path C:\DeploymentLogs
+
+#create Log File
+New-Item C:\DeploymentLogs\log.txt
+Set-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $MyLastExitCode"
+Set-Content C:\DeploymentLogs\log.txt "exit code is: $MyLastExitCode"
+
+#set execution policy
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
 
 #enable TLS 1.2 (required for Windows Server 2016)###############################################################################
@@ -126,5 +139,10 @@ if ($installTeams -eq 'Yes'){
     sleep 5
 
 }
+
+
+Set-Content C:\DeploymentLogs\log.txt "Script complete. Final exit code is: $MyLastExitCode"
+
+
 
 
