@@ -153,7 +153,7 @@ if ($installTeams -eq 'Yes'){
 }
 
 
-Set-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $MyLastExitCode"
+Set-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
 
 
 
