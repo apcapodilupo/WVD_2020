@@ -8,6 +8,16 @@ Param(
   [string] $installTeams
   )
 
+$MyLastExitCode = $LastExitCode
+
+#create directory for log file
+New-Item -ItemType "directory" -Path C:\DeploymentLogs
+
+#create Log File
+New-Item C:\DeploymentLogs\log.txt
+Set-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $MyLastExitCode"
+Set-Content C:\DeploymentLogs\log.txt "exit code is: $MyLastExitCode"
+
 
 #create share name
 $shareName = $storageAccountName+'.file.core.windows.net'
