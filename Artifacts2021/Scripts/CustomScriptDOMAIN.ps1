@@ -60,12 +60,12 @@ $shareName = $storageAccountName+'.file.core.windows.net'
 $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userprofiles'
 ###########Files#################################################################################################################
 
+Set-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
 ##Install FSLOGIX Agent
 #sets execution policy to 'bypass' and installs chocolatey package manager
-#Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 
-
+Set-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
 #installs fslogix apps 
 choco install fslogix -yes --ignore-checksums
 
@@ -74,6 +74,7 @@ sleep 10
 
 #configure fslogix profile containers
 
+Set-Content C:\DeploymentLogs\log.txt "Setting FSLOgix Registry Keys. exit code is: $LASTEXITCODE"
 
 #create profiles key
 New-Item 'HKLM:\Software\FSLogix\Profiles' -Force 
@@ -97,7 +98,7 @@ New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyTyp
 
 sleep 10
 
-
+Set-Content C:\DeploymentLogs\log.txt "Setting Defender Exclusions for FSLogix. exit code is: $LASTEXITCODE"
 #Add Defender Exclusions for FSLogix
 powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrv.sys’"
 powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrvvt.sys’"
@@ -114,6 +115,9 @@ powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix
 
 
 if ($installTeams -eq 'Yes'){
+
+    Set-Content C:\DeploymentLogs\log.txt "Installing Teams. exit code is: $LASTEXITCODE"
+
 
     #create Teams folder in C drive
     New-Item -Path "c:\" -Name "Install" -ItemType "directory"
@@ -149,7 +153,7 @@ if ($installTeams -eq 'Yes'){
 }
 
 
-Set-Content C:\DeploymentLogs\log.txt "Script complete. Final exit code is: $MyLastExitCode"
+Set-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $MyLastExitCode"
 
 
 
