@@ -16,14 +16,17 @@ New-Item -ItemType "directory" -Path C:\DeploymentLogs
 sleep 5
 
 #create Log File
-New-Item C:\DeploymentLogs\log3.txt
+New-Item C:\DeploymentLogs\log.txt
 sleep 5 
 
 Set-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $LASTEXITCODE"
+sleep 5
 
 #set execution policy
+Set-Content C:\DeploymentLogs\log.txt "Setting Execution Policy. exit code is: $LASTEXITCODE"
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
 
+Set-Content C:\DeploymentLogs\log.txt "Setting TLS. exit code is: $LASTEXITCODE"
 #enable TLS 1.2 (required for Windows Server 2016)###############################################################################
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
 sleep 5
@@ -32,10 +35,13 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name
 sleep 5
 #################################################################################################################################
 
+
+Set-Content C:\DeploymentLogs\log.txt "Installing Nuget Modules. exit code is: $LASTEXITCODE"
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 Install-Module -Name PowerShellGet -Force -AllowClobber
 sleep 5
 
+Set-Content C:\DeploymentLogs\log.txt "Installing AZ Modules. exit code is: $LASTEXITCODE"
 #install AZ modules
 Install-Module -Name Az -force -AllowClobber
 sleep 30
@@ -44,6 +50,7 @@ Import-Module Az.Accounts -force
 sleep 30
 
 
+Set-Content C:\DeploymentLogs\log.txt "downloading storageAccountScript. exit code is: $LASTEXITCODE"
 $Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
 Invoke-WebRequest -Uri $Url -OutFile "C:\JoinStorageAccount.zip"
 Expand-Archive -Path "C:\JoinStorageAccount.zip" -DestinationPath "C:\JoinStorageAccount" -Force 
