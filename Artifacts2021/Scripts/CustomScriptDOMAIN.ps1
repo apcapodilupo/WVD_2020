@@ -19,14 +19,14 @@ sleep 5
 New-Item C:\DeploymentLogs\log.txt
 sleep 5 
 
-Set-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $LASTEXITCODE"
 sleep 5
 
 #set execution policy
-Set-Content C:\DeploymentLogs\log.txt "Setting Execution Policy. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Setting Execution Policy. exit code is: $LASTEXITCODE"
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
 
-Set-Content C:\DeploymentLogs\log.txt "Setting TLS. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Setting TLS. exit code is: $LASTEXITCODE"
 #enable TLS 1.2 (required for Windows Server 2016)###############################################################################
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
 sleep 5
@@ -36,21 +36,22 @@ sleep 5
 #################################################################################################################################
 
 
-Set-Content C:\DeploymentLogs\log.txt "Installing Nuget Modules. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Installing Nuget Modules. exit code is: $LASTEXITCODE"
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
 Install-Module -Name PowerShellGet -Force -AllowClobber
 sleep 5
 
-Set-Content C:\DeploymentLogs\log.txt "Installing AZ Modules. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Installing AZ Modules. exit code is: $LASTEXITCODE"
 #install AZ modules
 Install-Module -Name Az -force -AllowClobber
 sleep 30
 
+Add-Content C:\DeploymentLogs\log.txt "Importing AZ.Accounts module. exit code is: $LASTEXITCODE"
 Import-Module Az.Accounts -force 
 sleep 30
 
 
-Set-Content C:\DeploymentLogs\log.txt "downloading storageAccountScript. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "downloading storageAccountScript. exit code is: $LASTEXITCODE"
 $Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
 Invoke-WebRequest -Uri $Url -OutFile "C:\JoinStorageAccount.zip"
 Expand-Archive -Path "C:\JoinStorageAccount.zip" -DestinationPath "C:\JoinStorageAccount" -Force 
@@ -60,12 +61,12 @@ $shareName = $storageAccountName+'.file.core.windows.net'
 $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userprofiles'
 ###########Files#################################################################################################################
 
-Set-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
 ##Install FSLOGIX Agent
 #sets execution policy to 'bypass' and installs chocolatey package manager
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 
-Set-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
 #installs fslogix apps 
 choco install fslogix -yes --ignore-checksums
 
@@ -74,7 +75,7 @@ sleep 10
 
 #configure fslogix profile containers
 
-Set-Content C:\DeploymentLogs\log.txt "Setting FSLOgix Registry Keys. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Setting FSLogix Registry Keys. exit code is: $LASTEXITCODE"
 
 #create profiles key
 New-Item 'HKLM:\Software\FSLogix\Profiles' -Force 
@@ -98,7 +99,7 @@ New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyTyp
 
 sleep 10
 
-Set-Content C:\DeploymentLogs\log.txt "Setting Defender Exclusions for FSLogix. exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Setting Defender Exclusions for FSLogix. exit code is: $LASTEXITCODE"
 #Add Defender Exclusions for FSLogix
 powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrv.sys’"
 powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrvvt.sys’"
@@ -116,7 +117,7 @@ powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix
 
 if ($installTeams -eq 'Yes'){
 
-    Set-Content C:\DeploymentLogs\log.txt "Installing Teams. exit code is: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Installing Teams. exit code is: $LASTEXITCODE"
 
 
     #create Teams folder in C drive
@@ -153,7 +154,7 @@ if ($installTeams -eq 'Yes'){
 }
 
 
-Set-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
 
 
 
