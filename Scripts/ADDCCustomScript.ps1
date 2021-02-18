@@ -69,6 +69,8 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.We
 
 #installs fslogix apps 
 Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
+sleep 10
+
 choco install fslogix -yes --ignore-checksums
 
 sleep 10
