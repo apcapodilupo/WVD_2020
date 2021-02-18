@@ -61,16 +61,42 @@ $shareName = $storageAccountName+'.file.core.windows.net'
 $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userprofiles'
 ###########Files#################################################################################################################
 
-Add-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
+
 ##Install FSLOGIX Agent
 #sets execution policy to 'bypass' and installs chocolatey package manager
+Add-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
+sleep 5
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
+sleep 5
+if ($LASTEXITCODE -ne 0){
+   Add-Content C:\DeploymentLogs\log.txt "Last exit code from operation was: $LASTEXITCODE. Retrying..."
+   sleep 5
 
-Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
+   choco install fslogix -yes --ignore-checksums
+   sleep 5
+
+   Add-Content C:\DeploymentLogs\log.txt "Retry finished. last exit exit code: $LASTEXITCODE. Resuming..."
+}
+
+
+
+
 #installs fslogix apps 
+Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
 choco install fslogix -yes --ignore-checksums
 
-sleep 10
+if ($LASTEXITCODE -ne 0){
+   Add-Content C:\DeploymentLogs\log.txt "Last exit code from operation was: $LASTEXITCODE. Retrying..."
+   sleep 5
+
+   choco install fslogix -yes --ignore-checksums
+   sleep 5
+
+   Add-Content C:\DeploymentLogs\log.txt "Retry finished. last exit exit code: $LASTEXITCODE. Resuming."
+}
+
+
+sleep 5
 
 
 #configure fslogix profile containers
