@@ -64,16 +64,17 @@ $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userpro
 #Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 Add-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
+sleep 5
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 
 
 #installs fslogix apps 
 Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
-sleep 10
+sleep 5
 
 choco install fslogix -yes --ignore-checksums
 
-sleep 10
+sleep 5
 
 
 #configure fslogix profile containers
