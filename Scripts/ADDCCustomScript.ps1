@@ -140,25 +140,24 @@ Add-Content C:\DeploymentLogs\log.txt "Setting FSLogix Registry Keys. exit code 
 
 #create profiles key
 New-Item 'HKLM:\Software\FSLogix\Profiles' -Force 
-sleep 10
+sleep 05
 
 #create enabled value
 New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name Enabled -Value 1
-sleep 10
+sleep 05
 
 
 #removes any local profiles that are found
 New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name DeleteLocalProfileWhenVHDShouldApply -Value 1
-sleep 10
+sleep 05
 
 #set  connection string
 New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VHDLocations -PropertyType String -Value $connectionString
-sleep 10
+sleep 05
 
 #set to vhdx
 New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyType String -Value "vhdx"
-
-sleep 10
+sleep 05
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
 Add-Content C:\DeploymentLogs\error.txt $Error
