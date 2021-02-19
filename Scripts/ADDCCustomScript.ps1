@@ -123,14 +123,16 @@ catch{
      $LASTEXITCODE = 0
 }
 
-
-#installs fslogix apps 
-Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
-sleep 5
-
-choco install fslogix -yes --ignore-checksums
-
-sleep 5
+#install fslogix apps
+try{ 
+    Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
+    choco install fslogix -yes --ignore-checksums
+    sleep 5
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. exit code is: $LASTEXITCODE"
+    $LASTEXITCODE = 0
+}
 
 
 #configure fslogix profile containers
