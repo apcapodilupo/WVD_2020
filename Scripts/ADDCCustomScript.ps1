@@ -15,7 +15,7 @@ sleep 5
 
 #create Log File and error log file
 New-Item C:\DeploymentLogs\log.txt
-New-Item C:\DeploymentLogs\errors.txt
+New-Item C:\DeploymentLogs\errorlog.txt
 sleep 5
 
 #create initial log
@@ -159,12 +159,11 @@ sleep 05
 if($LASTEXITCODE -ne 0){
 
     Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
-    Add-Content C:\DeploymentLogs\error.txt $Error
-    exit 0
+    Add-Content C:\DeploymentLogs\errorlog.txt $Error
 }
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
-Add-Content C:\DeploymentLogs\error.txt $Error
+Add-Content C:\DeploymentLogs\errorlog.txt $Error
 exit 0
 
 
