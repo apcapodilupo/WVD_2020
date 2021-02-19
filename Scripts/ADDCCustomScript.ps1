@@ -34,25 +34,50 @@ Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name
 sleep 5
 #################################################################################################################################
 
-Add-Content C:\DeploymentLogs\log.txt "Installing Nuget Modules. exit code is: $LASTEXITCODE"
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+#Install Nuget Modules
+try{
+  Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+  Add-Content C:\DeploymentLogs\log.txt "Installing Nuget Modules. exit code is: $LASTEXITCODE"
+  sleep 10
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading NuGet Modules with exit code: $LASTEXITCODE."
+    $LASTEXITCODE = 0
+}
+
 Add-Content C:\DeploymentLogs\log.txt "Installing powershellGet Modules. exit code is: $LASTEXITCODE"
 Install-Module -Name PowerShellGet -Force -AllowClobber
 sleep 5
 
 #install AZ modules
-Add-Content C:\DeploymentLogs\log.txt "Installing AZ Modules. exit code is: $LASTEXITCODE"
-Install-Module -Name Az -force -AllowClobber
-sleep 30
+try{
+ Install-Module -Name Az -force -AllowClobber
+ Add-Content C:\DeploymentLogs\log.txt "Installing AZ Modules. exit code is: $LASTEXITCODE"
+ sleep 10
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading az Modules with exit code: $LASTEXITCODE"
+    $LASTEXITCODE = 0
+}
+
 
 Add-Content C:\DeploymentLogs\log.txt "Importing AZ.Accounts module. exit code is: $LASTEXITCODE"
 Import-Module Az.Accounts -force 
 sleep 30
 
-Add-Content C:\DeploymentLogs\log.txt "downloading storageAccountScript. exit code is: $LASTEXITCODE"
-$Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
-Invoke-WebRequest -Uri $Url -OutFile "C:\JoinStorageAccount.zip"
-Expand-Archive -Path "C:\JoinStorageAccount.zip" -DestinationPath "C:\JoinStorageAccount" -Force 
+#download storage account script
+try{
+
+    Add-Content C:\DeploymentLogs\log.txt "downloading storageAccountScript. exit code is: $LASTEXITCODE"
+    $Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
+    Invoke-WebRequest -Uri $Url -OutFile "C:\JoinStorageAccount.zip"
+    Expand-Archive -Path "C:\JoinStorageAccount.zip" -DestinationPath "C:\JoinStorageAccount" -Force 
+
+}
+catch{
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading storage account script. exit code is: $LASTEXITCODE"
+     
+}
 
 #create share name
 $shareName = $storageAccountName+'.file.core.windows.net'

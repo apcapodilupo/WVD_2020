@@ -79,8 +79,6 @@ if ($LASTEXITCODE -ne 0){
 }
 
 
-
-
 #installs fslogix apps 
 Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
 choco install fslogix -yes --ignore-checksums
