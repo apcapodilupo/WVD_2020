@@ -43,7 +43,6 @@ try{
 }
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading NuGet Modules with exit code: $LASTEXITCODE."
-    $LASTEXITCODE = 0
 }
 
 
@@ -57,7 +56,6 @@ try{
 }
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading PSGet with exit code: $LASTEXITCODE"
-    $LASTEXITCODE = 0
 }
 
 
@@ -70,9 +68,7 @@ try{
 }
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading az Modules with exit code: $LASTEXITCODE"
-    $LASTEXITCODE = 0
 }
-
 
 
 #install AZAccounts modules
@@ -85,11 +81,7 @@ try{
 }
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error occurred Importing azAccounts Modules with exit code: $LASTEXITCODE"
-    Add-Content C:\DeploymentLogs\error.txt $Error
-    $LASTEXITCODE = 0
 }
-
-
 
 
 #download storage account script
@@ -104,13 +96,11 @@ try{
 }
 catch{
      Add-Content C:\DeploymentLogs\log.txt "Error downloading and expanding storage account script. exit code is: $LASTEXITCODE"
-     $LASTEXITCODE = 0    
 }
 
-#create share name
+#create share name for fslogix
 $shareName = $storageAccountName+'.file.core.windows.net'
 $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userprofiles'
-###########Files#################################################################################################################
 
 #Install Chocolatey
 try{
@@ -120,7 +110,6 @@ try{
 }
 catch{
      Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE"
-     $LASTEXITCODE = 0
 }
 
 #install fslogix apps
@@ -131,7 +120,6 @@ try{
 }
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. exit code is: $LASTEXITCODE"
-    $LASTEXITCODE = 0
 }
 
 
@@ -158,6 +146,14 @@ sleep 05
 #set to vhdx
 New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyType String -Value "vhdx"
 sleep 05
+
+
+if($LASTEXITCODE -ne 0){
+
+    Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
+    Add-Content C:\DeploymentLogs\error.txt $Error
+    exit 0
+}
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
 Add-Content C:\DeploymentLogs\error.txt $Error
