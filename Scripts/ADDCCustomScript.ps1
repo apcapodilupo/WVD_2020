@@ -164,7 +164,6 @@ if($LASTEXITCODE -ne 0){
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
 Add-Content C:\DeploymentLogs\errorlog.txt $Error
-exit 0
 
 
 
