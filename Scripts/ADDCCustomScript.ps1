@@ -23,17 +23,26 @@ Add-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $LASTEXITC
 sleep 5
 
 #set execution policy
-Add-Content C:\DeploymentLogs\log.txt "Setting Execution Policy. exit code is: $LASTEXITCODE"
-Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
+try{
+    Add-Content C:\DeploymentLogs\log.txt "Setting Execution Policy. exit code is: $LASTEXITCODE"
+    Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
+}
+catch{
+        Add-Content C:\DeploymentLogs\log.txt "Error occurred while setting execution policy with exit code: $LASTEXITCODE."
+}
 
-#enable TLS 1.2 (required for Windows Server 2016)###############################################################################
-Add-Content C:\DeploymentLogs\log.txt "Setting TLS. exit code is: $LASTEXITCODE"
-Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
-sleep 5
+#enable TLS 1.2 to work for Windows Server 2016 environments
+try{
+    Add-Content C:\DeploymentLogs\log.txt "Setting TLS. exit code is: $LASTEXITCODE"
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
+    sleep 5
 
-Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
-sleep 5
-#################################################################################################################################
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\.NetFramework\v4.0.30319' -Name 'SchUseStrongCrypto' -Value '1' -Type DWord
+    sleep 5
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred while setting TLS 1.2 with exit code: $LASTEXITCODE."
+}
 
 #Install Nuget Modules
 try{
@@ -57,7 +66,6 @@ try{
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading PSGet with exit code: $LASTEXITCODE"
 }
-
 
 
 #install AZ modules
