@@ -13,8 +13,9 @@ $LASTEXITCODE = 0
 New-Item -ItemType "directory" -Path C:\DeploymentLogs
 sleep 5
 
-#create Log File
+#create Log File and error log file
 New-Item C:\DeploymentLogs\log.txt
+New-Item C:\DeploymentLogs\errors.txt
 sleep 5
 
 #create initial log
@@ -45,9 +46,21 @@ catch{
     $LASTEXITCODE = 0
 }
 
-Add-Content C:\DeploymentLogs\log.txt "Installing powershellGet Modules. exit code is: $LASTEXITCODE"
-Install-Module -Name PowerShellGet -Force -AllowClobber
-sleep 5
+
+
+#install PSGet modules
+try{
+    Add-Content C:\DeploymentLogs\log.txt "Installing powershellGet Modules. exit code is: $LASTEXITCODE"
+    Install-Module -Name PowerShellGet -Force -AllowClobber
+    sleep 10
+
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading PSGet with exit code: $LASTEXITCODE"
+    $LASTEXITCODE = 0
+}
+
+
 
 #install AZ modules
 try{
@@ -61,9 +74,23 @@ catch{
 }
 
 
-Add-Content C:\DeploymentLogs\log.txt "Importing AZ.Accounts module. exit code is: $LASTEXITCODE"
-Import-Module Az.Accounts -force 
-sleep 30
+
+#install AZAccounts modules
+try{
+
+    Add-Content C:\DeploymentLogs\log.txt "Importing AZ.Accounts module. exit code is: $LASTEXITCODE"
+    Import-Module Az.Accounts -force 
+    sleep 10
+
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred Importing azAccounts Modules with exit code: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\error.txt $Error
+    $LASTEXITCODE = 0
+}
+
+
+
 
 #download storage account script
 try{
@@ -71,12 +98,13 @@ try{
     Add-Content C:\DeploymentLogs\log.txt "downloading storageAccountScript. exit code is: $LASTEXITCODE"
     $Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
     Invoke-WebRequest -Uri $Url -OutFile "C:\JoinStorageAccount.zip"
+    sleep 5
     Expand-Archive -Path "C:\JoinStorageAccount.zip" -DestinationPath "C:\JoinStorageAccount" -Force 
 
 }
 catch{
-     Add-Content C:\DeploymentLogs\log.txt "Error downloading storage account script. exit code is: $LASTEXITCODE"
-     
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading and expanding storage account script. exit code is: $LASTEXITCODE"
+     $LASTEXITCODE = 0    
 }
 
 #create share name
@@ -84,13 +112,16 @@ $shareName = $storageAccountName+'.file.core.windows.net'
 $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userprofiles'
 ###########Files#################################################################################################################
 
-##Install FSLOGIX Agent
-#sets execution policy to 'bypass' and installs chocolatey package manager
-#Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-Add-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
-sleep 5
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
+#Install Chocolatey
+try{
+    Add-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
+    sleep 5
+    Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
+}
+catch{
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE"
+     $LASTEXITCODE = 0
+}
 
 
 #installs fslogix apps 
@@ -128,6 +159,9 @@ New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyTyp
 sleep 10
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\error.txt $Error
+exit 0
+
 
 
 
