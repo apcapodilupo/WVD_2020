@@ -28,7 +28,7 @@ try{
     Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
 }
 catch{
-        Add-Content C:\DeploymentLogs\log.txt "Error occurred while setting execution policy with exit code: $LASTEXITCODE."
+        Add-Content C:\DeploymentLogs\log.txt "Error occurred while setting execution policy with exit code: $LASTEXITCODE.Please check the error log."
 }
 
 #enable TLS 1.2 to work for Windows Server 2016 environments
@@ -51,7 +51,7 @@ try{
   sleep 10
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading NuGet Modules with exit code: $LASTEXITCODE."
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading NuGet Modules with exit code: $LASTEXITCODE. Please check the error log."
 }
 
 
@@ -64,7 +64,7 @@ try{
 
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading PSGet with exit code: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading PSGet with exit code: $LASTEXITCODE. Please check the error log."
 }
 
 
@@ -75,7 +75,7 @@ try{
  sleep 10
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading az Modules with exit code: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading az Modules with exit code: $LASTEXITCODE. Please check the error log."
 }
 
 
@@ -88,7 +88,7 @@ try{
 
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error occurred Importing azAccounts Modules with exit code: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred Importing azAccounts Modules with exit code: $LASTEXITCODE. Please check the error log."
 }
 
 
@@ -103,7 +103,7 @@ try{
 
 }
 catch{
-     Add-Content C:\DeploymentLogs\log.txt "Error downloading and expanding storage account script. exit code is: $LASTEXITCODE"
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading and expanding storage account script. exit code is: $LASTEXITCODE. Please check the error log."
 }
 
 #create share name for fslogix
@@ -117,7 +117,7 @@ try{
     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 }
 catch{
-     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE"
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE. Please check the error log."
 }
 
 #install fslogix apps
@@ -127,7 +127,7 @@ try{
     sleep 5
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. exit code is: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. exit code is: $LASTEXITCODE. Please check the error log."
 }
 
 
@@ -161,9 +161,11 @@ if($LASTEXITCODE -ne 0){
     Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
     Add-Content C:\DeploymentLogs\errorlog.txt $Error
 }
+else{
+    Add-Content C:\DeploymentLogs\log.txt "Execution complete! Final exit code is: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\errorlog.txt $Error
 
-Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
-Add-Content C:\DeploymentLogs\errorlog.txt $Error
+}
 
 
 

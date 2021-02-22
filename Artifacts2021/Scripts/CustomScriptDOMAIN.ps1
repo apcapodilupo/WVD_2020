@@ -221,16 +221,6 @@ if ($installTeams -eq 'Yes'){
 }
 
 
-
-
-
-
-
-
-
-
-
-
 if($LASTEXITCODE -ne 0){
 
     Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
