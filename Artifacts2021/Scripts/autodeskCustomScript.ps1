@@ -8,18 +8,47 @@ Param(
   [string] $installTeams
   )
 
+
+#set the code to 0 (this will change if a non-zero is returned on any command.)
+$LASTEXITCODE = 0
+
+#create directory for log file
+New-Item -ItemType "directory" -Path C:\DeploymentLogs
+sleep 5
+
+#create Log File and error log file
+New-Item C:\DeploymentLogs\log.txt
+New-Item C:\DeploymentLogs\errorlog.txt
+sleep 5
+
+#create initial log
+Add-Content C:\DeploymentLogs\log.txt "Starting Script. exit code is: $LASTEXITCODE"
+sleep 5
+
+
 #create share name
 $shareName = $storageAccountName+'.file.core.windows.net'
 $connectionString = '\\' + $storageAccountName + '.file.core.windows.net\userprofiles'
-###########Files#################################################################################################################
 
-##Install FSLOGIX Agent
-#sets execution policy to 'bypass' and installs chocolatey package manager
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
+#Install Chocolatey
+try{
+    Add-Content C:\DeploymentLogs\log.txt "Installing chocolatey. exit code is: $LASTEXITCODE"
+    sleep 5
+    Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
+}
+catch{
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE"
+}
 
-
-#installs fslogix apps 
-choco install fslogix -yes --ignore-checksums
+#install fslogix apps
+try{ 
+    Add-Content C:\DeploymentLogs\log.txt "Installing FSLogix. exit code is: $LASTEXITCODE"
+    choco install fslogix -yes --ignore-checksums
+    sleep 5
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. exit code is: $LASTEXITCODE"
+}
 
 sleep 10
 
@@ -47,33 +76,43 @@ New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyTyp
 
 sleep 10
 
-#enable GPU rendering###############################################################################################
+#enable GPU Rendering
+Add-Content C:\DeploymentLogs\log.txt "Enabling GPU rendering. exit code is: $LASTEXITCODE"
 New-ITEMPROPERTY 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name bEnumerateHWBeforeSW -Value 1
 sleep 10
 
 #sets AVC Encoding
+Add-Content C:\DeploymentLogs\log.txt "Setting AVC Encoding for GPU environments. exit code is: $LASTEXITCODE"
 New-ITEMPROPERTY 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name AVCHardwareEncodePreferred -Value 1
 sleep 10
 
 #Full Screen Rendering
+Add-Content C:\DeploymentLogs\log.txt "Enabling full-screen rendering for GPU environments. exit code is: $LASTEXITCODE"
 New-ITEMPROPERTY 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name AVC444ModePreferred -Value 1
 sleep 10
-#####################################################################################################################
 
 
 #Add Defender Exclusions for FSLogix
-powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrv.sys’"
-powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrvvt.sys’"
-powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxccd.sys’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%TEMP%\*.VHD’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%TEMP%\*.VHDX’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%Windir%\*.VHD’"
-powershell -Command "Add-MpPreference -ExclusionExtension '%Windir%\*.VHDX’"
-powershell -Command "Add-MpPreference -ExclusionExtension '\\gcrwvduserprofiles.file.core.windows.net\userprofiles\*\*.*.VHDX’"
-powershell -Command "Add-MpPreference -ExclusionExtension '\\gcrwvduserprofiles.file.core.windows.net\userprofiles\*\*.*.VHD’"
-powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxccd.exe’"
-powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxccds.exe’"
-powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxsvc.exe’"
+try{
+    Add-Content C:\DeploymentLogs\log.txt "Setting Defender Exclusions for FSLogix. exit code is: $LASTEXITCODE"
+    powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrv.sys’"
+    powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxdrvvt.sys’"
+    powershell -Command "Add-MpPreference -ExclusionPath 'C:\Program Files\FSLogix\Apps\frxccd.sys’"
+    powershell -Command "Add-MpPreference -ExclusionExtension '%TEMP%\*.VHD’"
+    powershell -Command "Add-MpPreference -ExclusionExtension '%TEMP%\*.VHDX’"
+    powershell -Command "Add-MpPreference -ExclusionExtension '%Windir%\*.VHD’"
+    powershell -Command "Add-MpPreference -ExclusionExtension '%Windir%\*.VHDX’"
+    powershell -Command "Add-MpPreference -ExclusionExtension '\\gcrwvduserprofiles.file.core.windows.net\userprofiles\*\*.*.VHDX’"
+    powershell -Command "Add-MpPreference -ExclusionExtension '\\gcrwvduserprofiles.file.core.windows.net\userprofiles\*\*.*.VHD’"
+    powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxccd.exe’"
+    powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxccds.exe’"
+    powershell -Command "Add-MpPreference -ExclusionProcess '%Program Files%\FSLogix\Apps\frxsvc.exe’"
+
+}
+catch{
+    Add-Content C:\DeploymentLogs\log.txt "Error setting defender exclusions. exit code is: $LASTEXITCODE"
+
+}
 
 
 if ($installTeams -eq 'Yes'){
@@ -110,4 +149,14 @@ if ($installTeams -eq 'Yes'){
     sleep 5
 
 }
+
+if($LASTEXITCODE -ne 0){
+
+    Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
+    Add-Content C:\DeploymentLogs\errorlog.txt $Error
+}
+
+Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
+Add-Content C:\DeploymentLogs\errorlog.txt $Error
+
 
