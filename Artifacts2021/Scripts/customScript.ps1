@@ -102,6 +102,9 @@ catch{
 
 if ($installTeams -eq 'Yes'){
 
+    Add-Content C:\DeploymentLogs\log.txt "Installing Teams. exit code is: $LASTEXITCODE"
+
+
     #create Teams folder in C drive
     New-Item -Path "c:\" -Name "Install" -ItemType "directory"
 
@@ -110,29 +113,76 @@ if ($installTeams -eq 'Yes'){
     sleep 5
 
     #Download C++ Runtime
-    invoke-WebRequest -Uri https://aka.ms/vs/16/release/vc_redist.x64.exe -OutFile "C:\Install\vc_redist.x64.exe"
-    sleep 5
+    try{
+        Add-Content C:\DeploymentLogs\log.txt "Downloading C++ Runtime. exit code is: $LASTEXITCODE"
+        invoke-WebRequest -Uri https://aka.ms/vs/16/release/vc_redist.x64.exe -OutFile "C:\Install\vc_redist.x64.exe"
+        sleep 5
+    }
+    catch{
+        Add-Content C:\DeploymentLogs\log.txt "Error. Check the error log. Retrying... exit code is: $LASTEXITCODE"
+        invoke-WebRequest -Uri https://aka.ms/vs/16/release/vc_redist.x64.exe -OutFile "C:\Install\vc_redist.x64.exe"
+        sleep 5
+    }
 
     #Download RDCWEBRTCSvc
-    invoke-WebRequest -Uri https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4AQBt -OutFile "C:\Install\MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi"
-    sleep 5
+    try{
+        Add-Content C:\DeploymentLogs\log.txt "Downloading WebRTC Redirector Service. exit code is: $LASTEXITCODE"
+        invoke-WebRequest -Uri https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4AQBt -OutFile "C:\Install\MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi"
+        sleep 5
+    }
+    catch{
+        Add-Content C:\DeploymentLogs\log.txt "Error. Check the error log. Retrying... exit code is: $LASTEXITCODE"
+        invoke-WebRequest -Uri https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4AQBt -OutFile "C:\Install\MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi"
+        sleep 5
+    }
 
-    #Download Teams 
-    invoke-WebRequest -Uri https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.13565/Teams_windows_x64.msi -OutFile "C:\Install\Teams_windows_x64.msi"
-    sleep 5
+    #Download Teams
+    try{ 
+        Add-Content C:\DeploymentLogs\log.txt "Downloading Teams Machine-Wide Installer. exit code is: $LASTEXITCODE"
+        invoke-WebRequest -Uri https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.13565/Teams_windows_x64.msi -OutFile "C:\Install\Teams_windows_x64.msi"
+        sleep 5
+    }
+    catch{
+        Add-Content C:\DeploymentLogs\log.txt "Error. Check the error log. Retrying... exit code is: $LASTEXITCODE"
+        invoke-WebRequest -Uri https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.13565/Teams_windows_x64.msi -OutFile "C:\Install\Teams_windows_x64.msi"
+        sleep 5
+    }
 
     #Install C++ runtime
-    Start-Process -FilePath C:\Install\vc_redist.x64.exe -ArgumentList '/q', '/norestart'
-    sleep 5
+    try{ 
+        Add-Content C:\DeploymentLogs\log.txt "Installing C++ Runtime. exit code is: $LASTEXITCODE"
+        Start-Process -FilePath C:\Install\vc_redist.x64.exe -ArgumentList '/q', '/norestart'
+        sleep 5
+    }
+    catch{
+        Add-Content C:\DeploymentLogs\log.txt "Error. Check the error log. Retrying... exit code is: $LASTEXITCODE"
+        Start-Process -FilePath C:\Install\vc_redist.x64.exe -ArgumentList '/q', '/norestart'
+        sleep 5
+    }
 
     #Install Web Socket Redirector Service
-    msiexec /i C:\Install\MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi /q /n
-    sleep 5
+    try{ 
+        Add-Content C:\DeploymentLogs\log.txt "Installing Redirector Service. exit code is: $LASTEXITCODE"
+        msiexec /i C:\Install\MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi /q /n
+        sleep 5
+    }
+    catch{
+        Add-Content C:\DeploymentLogs\log.txt "Error. Check the error log. Retrying... exit code is: $LASTEXITCODE"
+        msiexec /i C:\Install\MsRdcWebRTCSvc_HostSetup_1.0.2006.11001_x64.msi /q /n
+        sleep 5
+    }
 
     # Install Teams
-    msiexec /i "C:\Install\Teams_windows_x64.msi" /l*v c:\Install\Teams.log ALLUSER=1 ALLUSERS=1 
-    sleep 5
-
+    try{
+        Add-Content C:\DeploymentLogs\log.txt "Installing Teams. exit code is: $LASTEXITCODE"
+        msiexec /i "C:\Install\Teams_windows_x64.msi" /l*v c:\Install\Teams.log ALLUSER=1 ALLUSERS=1 
+        sleep 5
+    }
+    catch{
+        Add-Content C:\DeploymentLogs\log.txt "Error. Check the error log. Retrying... exit code is: $LASTEXITCODE"
+        msiexec /i "C:\Install\Teams_windows_x64.msi" /l*v c:\Install\Teams.log ALLUSER=1 ALLUSERS=1 
+        sleep 5
+    }
 }
 
 if($LASTEXITCODE -ne 0){
