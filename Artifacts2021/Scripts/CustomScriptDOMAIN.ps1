@@ -153,6 +153,11 @@ sleep 05
 New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VHDLocations -PropertyType String -Value $connectionString
 sleep 05
 
+#flipflop username to front of profile name
+New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name FlipFlopProfileDirectoryName -Value 1
+sleep 10
+
+
 #set to vhdx
 New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyType String -Value "vhdx"
 sleep 05
@@ -272,6 +277,7 @@ if($LASTEXITCODE -ne 0){
 
     Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
     Add-Content C:\DeploymentLogs\errorlog.txt $Error
+    exit 0 
 }
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"

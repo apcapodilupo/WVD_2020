@@ -76,6 +76,11 @@ New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name VolumeType -PropertyTyp
 
 sleep 10
 
+#flipflop username to front of profile name
+New-ITEMPROPERTY 'HKLM:\Software\FSLogix\Profiles' -Name FlipFlopProfileDirectoryName -Value 1
+sleep 10
+
+
 #enable GPU Rendering
 Add-Content C:\DeploymentLogs\log.txt "Enabling GPU rendering. exit code is: $LASTEXITCODE"
 New-ITEMPROPERTY 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name bEnumerateHWBeforeSW -Value 1
