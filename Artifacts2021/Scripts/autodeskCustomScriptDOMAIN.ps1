@@ -288,6 +288,7 @@ if($LASTEXITCODE -ne 0){
 
     Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
     Add-Content C:\DeploymentLogs\errorlog.txt $Error
+    exit 0
 }
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"
