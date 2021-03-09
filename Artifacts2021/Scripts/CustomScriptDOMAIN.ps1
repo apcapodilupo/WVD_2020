@@ -8,9 +8,6 @@
 
   )
 
-#set the code to 0 (this will change if a non-zero is returned on any command.)
-$LASTEXITCODE = 0
-
 #create directory for log file
 New-Item -ItemType "directory" -Path C:\DeploymentLogs
 sleep 5
@@ -55,7 +52,6 @@ try{
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading NuGet Modules with exit code: $LASTEXITCODE."
 }
-
 
 
 #install PSGet modules
@@ -277,7 +273,6 @@ if($LASTEXITCODE -ne 0){
 
     Add-Content C:\DeploymentLogs\log.txt "Execution finished with non-zero exit code of: $LASTEXITCODE. Please check the error log."
     Add-Content C:\DeploymentLogs\errorlog.txt $Error
-    exit 0 
 }
 
 Add-Content C:\DeploymentLogs\log.txt "Execution complete. Final exit code is: $LASTEXITCODE"

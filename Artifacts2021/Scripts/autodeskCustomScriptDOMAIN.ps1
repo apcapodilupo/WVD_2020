@@ -8,8 +8,6 @@
 
   )
 
-#set the code to 0 (this will change if a non-zero is returned on any command.)
-$LASTEXITCODE = 0
 
 #create directory for log file
 New-Item -ItemType "directory" -Path C:\DeploymentLogs
