@@ -568,13 +568,10 @@
                         "enabled": true
                     },
                     {
-                        "category": "Connection",
-                        "enabled": true
-                    },
-                    {
-                        "category": "HostRegistration",
+                        "category": "Feed",
                         "enabled": true
                     }
+
                 ]
             }
         },
