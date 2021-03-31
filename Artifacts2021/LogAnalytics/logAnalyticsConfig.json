@@ -568,10 +568,17 @@
                         "enabled": true
                     },
                     {
-                        "category": "Feed",
+                        "category": "Connection",
+                        "enabled": true
+                    },
+                    {
+                        "category": "HostRegistration",
+                        "enabled": true
+                    },
+                    {
+                        "category": "AgentHealthStatus",
                         "enabled": true
                     }
-
                 ]
             }
         },
