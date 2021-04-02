@@ -1,10 +1,18 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-
         "hostpoolName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "The name of the WVD host pool"
+            }
+        },
+        "workspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the WVD Workspace"
+            }
         },
 
         "rdshPrefix": {
@@ -16,45 +24,27 @@
             "defaultValue": 1
         }
     },
+    "variables":{
 
-    "variables": {
         "subscriptionID": "[subscription().subscriptionId]",
         "resourceGroupName": "[resourceGroup().name]",
         "location": "[resourceGroup().location]",
-        "settingName": "HostPool-Diag",
-        "workspaceName": "[concat( 'WVDMonior-',uniquestring(resourceGroup().id))]",
+        "settingName": "WVDInsights",
+        "workspaceName": "[concat( 'WVDMonitor-',uniquestring(resourceGroup().id))]",
         "workspaceId": "[concat( '/subscriptions/',variables('subscriptionID'),'/resourceGroups/',variables('resourceGroupName'),'/providers/Microsoft.OperationalInsights/workspaces/',variables('workspaceName'))]",
+        "evtObj": "[json(variables('events'))]",
+        "events": "[[{\"name\":\"Microsoft-FSLogix-Apps/Operational\",\"deployedName\":\"DataSource_WindowsEvent_098e47df-95f9-4603-a355-00c679cc9a35\",\"types\":[{\"eventType\":\"Error\"},{\"eventType\":\"Information\"},{\"eventType\":\"Warning\"}]},{\"name\":\"Microsoft-Windows-TerminalServices-LocalSessionManager/Operational\",\"deployedName\":\"DataSource_WindowsEvent_682ce57e-40ae-4dc0-9af1-526978ffe4c4\",\"types\":[{\"eventType\":\"Error\"},{\"eventType\":\"Information\"},{\"eventType\":\"Warning\"}]},{\"name\":\"Application\",\"deployedName\":\"DataSource_WindowsEvent_8534e1e1-c299-4951-984a-a3f04276e49b\",\"types\":[{\"eventType\":\"Error\"},{\"eventType\":\"Warning\"}]},{\"name\":\"Microsoft-Windows-TerminalServices-RemoteConnectionManager/Admin\",\"deployedName\":\"DataSource_WindowsEvent_706d6a87-17c0-419c-8c8a-1878c32c1e09\",\"types\":[{\"eventType\":\"Error\"},{\"eventType\":\"Information\"},{\"eventType\":\"Warning\"}]},{\"name\":\"Microsoft-FSLogix-Apps/Admin\",\"deployedName\":\"DataSource_WindowsEvent_07d282b5-fad3-4c86-90b3-bb169f480e46\",\"types\":[{\"eventType\":\"Error\"},{\"eventType\":\"Information\"},{\"eventType\":\"Warning\"}]},{\"name\":\"System\",\"deployedName\":\"DataSource_WindowsEvent_f830f24c-7849-4b30-8bfa-39909f2fc831\",\"types\":[{\"eventType\":\"Error\"},{\"eventType\":\"Warning\"}]}]",
         "vmInitialNumber": 0
 
     },
     "resources": [
+
         {
             "apiVersion": "2017-03-15-preview",
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('workspaceName')]",
             "location": "[variables('location')]",
-
             "resources": [
-                {
-                    "apiVersion": "2015-11-01-preview",
-                    "type": "datasources",
-                    "name": "sampleWindowsEvent1",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsEvent",
-                    "properties": {
-                        "eventLogName": "Application",
-                        "eventTypes": [
-                            {
-                                "eventType": "Error"
-                            },
-                            {
-                                "eventType": "Warning"
-                            }
-                        ]
-                    }
-                },
                 {
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
@@ -238,81 +228,6 @@
                 {
                     "apiVersion": "2015-11-01-preview",
                     "type": "datasources",
-                    "name": "perfcounter13",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsPerformanceCounter",
-                    "properties": {
-                        "objectName": "Process",
-                        "instanceName": "*",
-                        "intervalSeconds": 30,
-                        "counterName": "% User Time"
-                    }
-                },
-                {
-                    "apiVersion": "2015-11-01-preview",
-                    "type": "datasources",
-                    "name": "perfcounter14",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsPerformanceCounter",
-                    "properties": {
-                        "objectName": "Process",
-                        "instanceName": "*",
-                        "intervalSeconds": 30,
-                        "counterName": "Thread Count"
-                    }
-                },
-                {
-                    "apiVersion": "2015-11-01-preview",
-                    "type": "datasources",
-                    "name": "perfcounter15",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsPerformanceCounter",
-                    "properties": {
-                        "objectName": "Process",
-                        "instanceName": "*",
-                        "intervalSeconds": 20,
-                        "counterName": "% Processor Time"
-                    }
-                },
-                {
-                    "apiVersion": "2015-11-01-preview",
-                    "type": "datasources",
-                    "name": "perfcounter16",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsPerformanceCounter",
-                    "properties": {
-                        "objectName": "Process",
-                        "instanceName": "*",
-                        "intervalSeconds": 30,
-                        "counterName": "IO Write Operations/sec"
-                    }
-                },
-                {
-                    "apiVersion": "2015-11-01-preview",
-                    "type": "datasources",
-                    "name": "perfcounter17",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsPerformanceCounter",
-                    "properties": {
-                        "objectName": "Process",
-                        "instanceName": "*",
-                        "intervalSeconds": 30,
-                        "counterName": "IO Read Operations/sec"
-                    }
-                },
-                {
-                    "apiVersion": "2015-11-01-preview",
-                    "type": "datasources",
                     "name": "perfcounter18",
                     "dependsOn": [
                         "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
@@ -429,129 +344,14 @@
                         "intervalSeconds": 30,
                         "counterName": "Current UDP Bandwidth"
                     }
-                },
-                {
-                    "type": "datasources",
-                    "apiVersion": "2020-08-01",
-                    "name": "WindowsEventsSystem",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsEvent",
-                    "properties": {
-                        "eventLogName": "System",
-                        "eventTypes": [
-                            {
-                                "eventType": "Error"
-                            },
-                            {
-                                "eventType": "Warning"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "datasources",
-                    "apiVersion": "2020-08-01",
-                    "name": "FSLogixEventOperational",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsEvent",
-                    "properties": {
-                        "eventLogName": "Microsoft-FSLogix-Apps/Operational",
-                        "eventTypes": [
-                            {
-                                "eventType": "Error"
-                            },
-                            {
-                                "eventType": "Warning"
-                            },
-                            {
-                                "eventType": "Information"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "datasources",
-                    "apiVersion": "2020-08-01",
-                    "name": "TerminalServicesLocal",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsEvent",
-                    "properties": {
-                        "eventLogName": "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
-                        "eventTypes": [
-                            {
-                                "eventType": "Error"
-                            },
-                            {
-                                "eventType": "Warning"
-                            },
-                            {
-                                "eventType": "Information"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "datasources",
-                    "apiVersion": "2020-08-01",
-                    "name": "RemoteConnectionAdmin",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsEvent",
-                    "properties": {
-                        "eventLogName": "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Admin",
-                        "eventTypes": [
-                            {
-                                "eventType": "Error"
-                            },
-                            {
-                                "eventType": "Warning"
-                            },
-                            {
-                                "eventType": "Information"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "datasources",
-                    "apiVersion": "2020-08-01",
-                    "name": "FSLogixAppsAdmin",
-                    "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                    ],
-                    "kind": "WindowsEvent",
-                    "properties": {
-                        "eventLogName": "Microsoft-FSLogix-Apps/Admin",
-                        "eventTypes": [
-                            {
-                                "eventType": "Error"
-                            },
-                            {
-                                "eventType": "Warning"
-                            },
-                            {
-                                "eventType": "Information"
-                            }
-                        ]
-                    }
                 }
-
             ]
         },
+        
         {
             "type": "Microsoft.DesktopVirtualization/hostpools/providers/diagnosticSettings",
             "apiVersion": "2017-05-01-preview",
             "name": "[concat(parameters('hostpoolName'),'/Microsoft.Insights/', variables('settingName'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-            ],
             "properties": {
                 "workspaceId": "[variables('workspaceId')]",
                 "logs": [
@@ -582,6 +382,53 @@
                 ]
             }
         },
+                {
+            "type": "Microsoft.DesktopVirtualization/workspaces/providers/diagnosticSettings",
+            "apiVersion": "2017-05-01-preview",
+            "name": "[concat(parameters('workspaceName'),'/Microsoft.Insights/', variables('settingName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+            ],
+
+            "properties": {
+                "workspaceId": "[variables('workspaceId')]",
+                "logs": [
+                    {
+                        "category": "Checkpoint",
+                        "enabled": true
+                    },
+                    {
+                        "category": "Error",
+                        "enabled": true
+                    },
+                    {
+                        "category": "Management",
+                        "enabled": true
+                    },
+                    {
+                        "category": "Feed",
+                        "enabled": true
+                    }
+                ]
+            }
+        },
+        {
+            "copy": {
+                "name": "eventscopy",
+                "count": "[length(variables('evtObj'))]"
+            },
+            "type": "Microsoft.OperationalInsights/workspaces/datasources",
+            "apiVersion": "2020-08-01",
+            "name": "[concat(variables('workspaceName'),'/',variables('evtObj')[copyIndex()].deployedName)]",
+            "dependsOn": [
+                "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+            ],
+            "kind": "WindowsEvent",
+            "properties": {
+                "eventLogName": "[variables('evtObj')[copyIndex()].name]",
+                "eventTypes": "[variables('evtObj')[copyIndex()].types]"
+            }
+        },
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
@@ -607,5 +454,8 @@
                 }
             }
         }
+        
+
     ]
+    
 }
