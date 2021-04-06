@@ -47,9 +47,10 @@ try{
     sleep 5
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. Retrying... exit code is: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error Installing FSLogix. Retrying... exit code is: $LASTEXITCODE"
     choco install fslogix -yes --ignore-checksums
     sleep 5
+
 
 }
 
