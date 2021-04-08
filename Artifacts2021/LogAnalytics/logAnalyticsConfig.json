@@ -437,7 +437,8 @@
             "name": "[concat(parameters('rdshPrefix'), add(copyindex(), variables('vmInitialNumber')), '/', 'installOMSAgent')]",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]",
+                "eventscopy"
             ],
             "copy": {
                 "name": "vmextensioncopy",
