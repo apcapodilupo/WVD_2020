@@ -435,7 +435,7 @@
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('rdshPrefix'), add(copyindex(), variables('vmInitialNumber')), '/', 'installOMSAgent')]",
-            "location": "[variables('location')]",
+            "location": "[variables('location')[copyIndex()]]",
             "dependsOn": [
                 "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
             ],
@@ -456,6 +456,7 @@
                 }
             }
         }
+        
         
 
     ]
