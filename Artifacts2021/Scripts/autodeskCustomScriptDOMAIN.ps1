@@ -28,7 +28,9 @@ try{
     Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
 }
 catch{
-        Add-Content C:\DeploymentLogs\log.txt "Error occurred while setting execution policy with exit code: $LASTEXITCODE."
+        Add-Content C:\DeploymentLogs\log.txt "Error occurred while setting execution policy with exit code: $LASTEXITCODE. Retrying."
+        Set-ExecutionPolicy -ExecutionPolicy Unrestricted -force
+
 }
 
 #enable TLS 1.2 to work for Windows Server 2016 environments
@@ -51,18 +53,24 @@ try{
   sleep 10
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading NuGet Modules with exit code: $LASTEXITCODE."
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading NuGet Modules with exit code: $LASTEXITCODE.Retrying."
+    Add-Content C:\DeploymentLogs\log.txt "Installing Nuget Modules. exit code is: $LASTEXITCODE"
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+
+
 }
 
 #install PSGet modules
 try{
-    Add-Content C:\DeploymentLogs\log.txt "Installing powershellGet Modules. exit code is: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Installing powershellGet Modules. Retrying. exit code is: $LASTEXITCODE"
     Install-Module -Name PowerShellGet -Force -AllowClobber
     sleep 10
 
 }
 catch{
     Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading PSGet with exit code: $LASTEXITCODE"
+    Install-Module -Name PowerShellGet -Force -AllowClobber
+
 }
 
 #install AZ modules
@@ -72,7 +80,9 @@ try{
  sleep 10
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading az Modules with exit code: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred downloading az Modules with exit code: $LASTEXITCODE. Retrying."
+    Install-Module -Name Az -force -AllowClobber
+
 }
 
 
@@ -85,7 +95,9 @@ try{
 
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error occurred Importing azAccounts Modules with exit code: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error occurred Importing azAccounts Modules with exit code: $LASTEXITCODE. Retrying."
+    Import-Module Az.Accounts -force 
+
 }
 
 
@@ -100,7 +112,15 @@ try{
 
 }
 catch{
-     Add-Content C:\DeploymentLogs\log.txt "Error downloading and expanding storage account script. exit code is: $LASTEXITCODE"
+
+    Add-Content C:\DeploymentLogs\log.txt "Error downloading and expanding storage account script. exit code is: $LASTEXITCODE. Retrying."
+
+    Add-Content C:\DeploymentLogs\log.txt "downloading storageAccountScript. exit code is: $LASTEXITCODE"
+    $Url = 'https://github.com/apcapodilupo/WVD_2020/blob/main/Scripts/JoinStorageAccount.zip?raw=true' 
+    Invoke-WebRequest -Uri $Url -OutFile "C:\JoinStorageAccount.zip"
+    sleep 5
+    Expand-Archive -Path "C:\JoinStorageAccount.zip" -DestinationPath "C:\JoinStorageAccount" -Force 
+
 }
 
 #create share name for fslogix
@@ -114,7 +134,9 @@ try{
     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 }
 catch{
-     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE"
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE. Retrying."
+     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
+
 }
 
 #install fslogix apps
@@ -124,7 +146,9 @@ try{
     sleep 5
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. exit code is: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. Retrying. exit code is: $LASTEXITCODE"
+    choco install fslogix -yes --ignore-checksums
+
 }
 
 

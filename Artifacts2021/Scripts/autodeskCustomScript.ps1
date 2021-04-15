@@ -37,7 +37,9 @@ try{
     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
 }
 catch{
-     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager. exit code is: $LASTEXITCODE"
+     Add-Content C:\DeploymentLogs\log.txt "Error downloading chocolatey package manager.Retrying... exit code is: $LASTEXITCODE"
+     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Scripts/install.ps1'))
+
 }
 
 #install fslogix apps
@@ -47,7 +49,9 @@ try{
     sleep 5
 }
 catch{
-    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. exit code is: $LASTEXITCODE"
+    Add-Content C:\DeploymentLogs\log.txt "Error downloading FSLogix agent. Retrying... exit code is: $LASTEXITCODE"
+      choco install fslogix -yes --ignore-checksums
+
 }
 
 sleep 10
