@@ -56,7 +56,6 @@ catch{
 
 sleep 10
 
-choco install googlechrome
 
 #configure fslogix profile containers
 
