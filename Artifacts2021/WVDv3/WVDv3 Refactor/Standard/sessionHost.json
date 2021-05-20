@@ -30,6 +30,17 @@
                 "description": "This prefix will be used in combination with the VM number to create the VM name. This value includes the dash, so if using “rdsh” as the prefix, VMs would be named “rdsh-0”, “rdsh-1”, etc. You should use a unique prefix to reduce name collisions in Active Directory."
             }
         },
+        "deployImageVM": {
+            "defaultValue": false,
+            "type": "bool",
+            "allowedValues": [
+                true,
+                false
+            ],
+            "metadata": {
+                "description": "Deploy a partialy configured base-VM to create a golden image for your WVD deployment."
+            }
+        },
         "rdshNumberOfInstances": {
             "type": "Int",
             "metadata": {
@@ -230,6 +241,7 @@
         "ResourceGroupName": "[resourceGroup().name]",
         "subscriptionID": "[subscription().subscriptionId]",
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
+        "imageVmName": "imageVM",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
         "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File customScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'),' ', parameters('installTeams'))]"
 
@@ -444,6 +456,34 @@
             "copy": {
                 "name": "fslogix-profiles-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
+            }
+        },
+        
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-11-01",
+            "condition": "[parameters('deployImageVM')]",
+            "name": "[concat(variables('imageVmName'), '-nic')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "NSG-linkedTemplate",
+            ],
+            "tags": "[parameters('networkInterfaceTags')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[parameters('subnet-id')]"
+                            },
+                            "publicIpAddress": "[if(parameters('usePublicIP'), json(concat('{\"id\": \"', resourceId('Microsoft.Network/publicIpAddresses', concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '-ip')), '\"}')), json('null'))]"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": "[parameters('enableAcceleratedNetworking')]",
+                "networkSecurityGroup": "[if(empty(parameters('networkSecurityGroupId')), json('null'), json(concat('{\"id\": \"', variables('nsgId'), '\"}')))]"
             }
         }
     ],
