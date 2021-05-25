@@ -229,7 +229,7 @@
             }
         },
         "installTeams": {
-            "defaultValue":"Yes",
+            "defaultValue": "Yes",
             "type": "string"
         }
     },
@@ -242,6 +242,9 @@
         "subscriptionID": "[subscription().subscriptionId]",
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "imageVmName": "imageVM",
+        "publicIpAddressName": "imageVM-PIP",
+        "publicIpAddressSKU": "Basic",
+        "publicIpAddress": { "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]" },
         "location": "[resourceGroup().location]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
         "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File customScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'),' ', parameters('installTeams'))]"
@@ -459,7 +462,21 @@
                 "count": "[parameters('rdshNumberOfInstances')]"
             }
         },
-        
+
+
+        {
+            "name": "[variables('publicIpAddressName')]",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "condition": "[parameters('deployImageVM')]",
+            "apiVersion": "2019-02-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "publicIpAllocationMethod": "Dynamic"
+            },
+            "sku": {
+                "name": "[variables('publicIpAddressSKU')]"
+            }
+        },
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2018-11-01",
@@ -479,7 +496,7 @@
                             "subnet": {
                                 "id": "[parameters('subnet-id')]"
                             },
-                            "publicIpAddress": "[if(parameters('deployImageVM'), json(concat('{\"id\": \"', resourceId('Microsoft.Network/publicIpAddresses', concat(variables('imageVmName'), '-ip')), '\"}')), json('null'))]"
+                            "publicIpAddress": "[variables('publicIpAddress')]"
                         }
                     }
                 ],
