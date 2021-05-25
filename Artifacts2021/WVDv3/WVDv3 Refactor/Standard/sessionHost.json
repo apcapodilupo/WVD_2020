@@ -507,10 +507,13 @@
         {
             "name": "[variables('imageVmName')]",
             "type": "Microsoft.Compute/virtualMachines",
+            "condition": "[parameters('deployImageVM')]",
             "apiVersion": "2021-03-01",
             "location": "[variables('location')]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', 'imageVM-nic')]"
+                "[concat('Microsoft.Network/networkInterfaces/', 'imageVM-nic')]",
+                "rdsh-dsc-loop"
+
             ],
             "properties": {
                 "hardwareProfile": {
@@ -579,7 +582,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2018-06-01",
-            "name": "[concat(variables('imageVmName'),'/installCustomScript')]",
+            "name": "[concat(variables('imageVmName'),'/installcustomscript')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('imageVmName'))]",
