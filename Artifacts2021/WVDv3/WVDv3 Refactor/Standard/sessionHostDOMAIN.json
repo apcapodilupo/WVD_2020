@@ -589,8 +589,8 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('imageVmName'))]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('imageVmName'), 'joindomain')]"
-
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('imageVmName'), 'joindomain')]",
+                "fslogix-profiles-loop"
 
             ],
             "properties": {
