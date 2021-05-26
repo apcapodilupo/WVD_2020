@@ -556,6 +556,7 @@
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "apiVersion": "2018-10-01",
                     "name": "[concat(variables('imageVmName'), '/', 'joindomain')]",
+                    "condition": "[parameters('deployImageVM')]",
                     "location": "[variables('location')]",
                     "dependsOn": [
                         "[concat('Microsoft.Compute/virtualMachines/', variables('imageVmName'))]"

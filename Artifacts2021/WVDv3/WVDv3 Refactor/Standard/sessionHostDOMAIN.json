@@ -248,7 +248,6 @@
         "publicIpAddressSKU": "Basic",
         "publicIpAddress": { "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]" },
         "location": "[resourceGroup().location]",
-
         "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File CustomScriptDOMAIN.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'), ' ', parameters('installTeams'))]"
 
     },
@@ -557,6 +556,7 @@
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "apiVersion": "2018-10-01",
+                    "condition": "[parameters('deployImageVM')]",
                     "name": "[concat(variables('imageVmName'), '/', 'joindomain')]",
                     "location": "[variables('location')]",
                     "dependsOn": [
