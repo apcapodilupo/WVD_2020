@@ -585,6 +585,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2018-06-01",
             "name": "[concat(variables('imageVmName'),'/installcustomscript')]",
+            "condition": "[parameters('deployImageVM')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('imageVmName'))]",
