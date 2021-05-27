@@ -656,11 +656,11 @@
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2018-06-01",
-            "name": "[concat(variables('imageVmName'),'/installGridDriver')]",
+            "name": "[concat(variables('imageVmName'),'/nvidia-grid')]",
             "condition": "[equals(variables('isNsv4'),false())]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat(variables('imageVmName'),'/installcustomscript')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('imageVmName'), 'installcustomscript')]"
             ],
             "properties": {
                 "publisher": "Microsoft.HpcCompute",
