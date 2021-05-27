@@ -30,6 +30,17 @@
                 "description": "This prefix will be used in combination with the VM number to create the VM name. This value includes the dash, so if using “rdsh” as the prefix, VMs would be named “rdsh-0”, “rdsh-1”, etc. You should use a unique prefix to reduce name collisions in Active Directory."
             }
         },
+        "deployImageVM": {
+            "defaultValue": false,
+            "type": "bool",
+            "allowedValues": [
+                true,
+                false
+            ],
+            "metadata": {
+                "description": "Deploy a partialy configured base-VM to create a golden image for your WVD deployment."
+            }
+        },
         "rdshNumberOfInstances": {
             "type": "Int",
             "metadata": {
@@ -217,7 +228,7 @@
                 "description": "name of the storage account used"
             }
         },
-        "installTeams":{
+        "installTeams": {
             "type": "string",
             "defaultValue": "No"
         }
@@ -233,7 +244,15 @@
         "newNsgName": "[concat(parameters('rdshPrefix'), 'nsg-', parameters('_guidValue'))]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
         "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File autodeskCustomScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'), ' ', parameters('installTeams'))]",
-        "isNsv4": "[contains(parameters('rdshVmSize'), '_v4')]"
+        "isNsv4": "[contains(parameters('rdshVmSize'), '_v4')]",
+
+        "publicIpAddressName": "imageVM-PIP",
+        "publicIpAddressSKU": "Basic",
+        "publicIpAddress": { "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]" },
+        "location": "[resourceGroup().location]",
+        "imageVmName": "imageVM"
+
+
 
     },
     "resources": [
@@ -488,9 +507,185 @@
                 "settings": {
                 }
             },
-             "copy": {
+            "copy": {
                 "name": "additional-rdsh-AMD-GPU-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
+            }
+        },
+        {
+            "name": "[variables('publicIpAddressName')]",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "condition": "[parameters('deployImageVM')]",
+            "apiVersion": "2019-02-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "publicIpAllocationMethod": "Dynamic"
+            },
+            "sku": {
+                "name": "[variables('publicIpAddressSKU')]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-11-01",
+            "condition": "[parameters('deployImageVM')]",
+            "name": "[concat(variables('imageVmName'), '-nic')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "NSG-linkedTemplate"
+            ],
+            "tags": "[parameters('networkInterfaceTags')]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[parameters('subnet-id')]"
+                            },
+                            "publicIpAddress": "[variables('publicIpAddress')]"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": "[parameters('enableAcceleratedNetworking')]",
+                "networkSecurityGroup": "[if(empty(parameters('networkSecurityGroupId')), json('null'), json(concat('{\"id\": \"', variables('nsgId'), '\"}')))]"
+            }
+        },
+        {
+            "name": "[variables('imageVmName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "condition": "[parameters('deployImageVM')]",
+            "apiVersion": "2021-03-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', 'imageVM-nic')]",
+                "rdsh-dsc-loop"
+
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('rdshVmSize')]"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "FromImage",
+                        "managedDisk": {
+                            "storageAccountType": "[variables('storageAccountType')]"
+                        }
+                    },
+                    "imageReference": {
+                        "publisher": "[parameters('vmGalleryImagePublisher')]",
+                        "offer": "[parameters('vmGalleryImageOffer')]",
+                        "sku": "[parameters('vmGalleryImageSKU')]",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'imageVM-nic')]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[variables('imageVmName')]",
+                    "adminUsername": "[variables('existingDomainUsername')]",
+                    "adminPassword": "[parameters('administratorAccountPassword')]",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true
+                    }
+                },
+                "licenseType": "Windows_Server"
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Compute/virtualMachines/extensions",
+                    "apiVersion": "2018-10-01",
+                    "name": "[concat(variables('imageVmName'), '/', 'joindomain')]",
+                    "condition": "[parameters('deployImageVM')]",
+                    "location": "[variables('location')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', variables('imageVmName'))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "JsonADDomainExtension",
+                        "typeHandlerVersion": "1.3",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "name": "[variables('domain')]",
+                            "ouPath": "[parameters('ouPath')]",
+                            "user": "[parameters('administratorAccountUsername')]",
+                            "restart": "true",
+                            "options": "3"
+                        },
+                        "protectedSettings": {
+                            "password": "[parameters('administratorAccountPassword')]"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2018-06-01",
+            "name": "[concat(variables('imageVmName'),'/installcustomscript')]",
+            "condition": "[parameters('deployImageVM')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('imageVmName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('imageVmName'), 'joindomain')]",
+                "fslogix-profiles-loop"
+
+            ],
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.9",
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Artifacts2021/Scripts/autodeskCustomScript.ps1"
+                    ],
+                    "commandToExecute": "[variables('commandToExecute')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2018-06-01",
+            "name": "[concat(variables('imageVmName'),'/installGridDriver')]",
+            "condition": "[equals(variables('isNsv4'),false())]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat(variables('imageVmName'),'/installcustomscript')]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.HpcCompute",
+                "type": "NvidiaGpuDriverWindows",
+                "typeHandlerVersion": "1.2",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2018-06-01",
+            "name": "[concat(variables('imageVmName'),'/installAMDDriver')]",
+            "condition": "[equals(variables('isNsv4'),true())]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat(variables('imageVmName'),'/installcustomscript')]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.HpcCompute",
+                "type": "AmdGpuDriverWindows",
+                "typeHandlerVersion": "1.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                }
             }
         }
     ],
