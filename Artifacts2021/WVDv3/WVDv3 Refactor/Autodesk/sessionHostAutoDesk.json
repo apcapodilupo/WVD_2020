@@ -566,7 +566,7 @@
             ],
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "[variables('imgVMSize')]"
+                    "vmSize": "[parameters('rdshVmSize')]"
                 },
                 "storageProfile": {
                     "osDisk": {
