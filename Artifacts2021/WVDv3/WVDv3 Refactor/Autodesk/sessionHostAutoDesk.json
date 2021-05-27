@@ -250,7 +250,8 @@
         "publicIpAddressSKU": "Basic",
         "publicIpAddress": { "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]" },
         "location": "[resourceGroup().location]",
-        "imageVmName": "imageVM"
+        "imageVmName": "imageVM",
+        "imgVMSize": "Standard_D4s_v3"
 
 
 
@@ -565,7 +566,7 @@
             ],
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "[parameters('rdshVmSize')]"
+                    "vmSize": "[variables('imgVMSize')]"
                 },
                 "storageProfile": {
                     "osDisk": {
