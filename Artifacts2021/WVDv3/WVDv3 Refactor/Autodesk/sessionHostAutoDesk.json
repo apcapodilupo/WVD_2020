@@ -678,7 +678,7 @@
             "condition": "[equals(variables('isNsv4'),true())]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat(variables('imageVmName'),'/installcustomscript')]"
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('imageVmName'), 'installcustomscript')]"
             ],
             "properties": {
                 "publisher": "Microsoft.HpcCompute",
