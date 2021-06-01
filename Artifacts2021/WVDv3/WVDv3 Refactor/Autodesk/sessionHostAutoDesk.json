@@ -561,7 +561,10 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', 'imageVM-nic')]",
-                "rdsh-dsc-loop"
+                "rdsh-dsc-loop",
+                "fslogix-profiles-loop",
+                "additional-rdsh-nvidia-grid-loop",
+                "additional-rdsh-AMD-GPU-loop"
 
             ],
             "properties": {

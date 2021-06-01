@@ -559,7 +559,9 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', 'imageVM-nic')]",
-                "rdsh-dsc-loop"
+                "rdsh-dsc-loop",
+                "fslogix-profiles-loop"
+
 
             ],
             "properties": {
@@ -655,7 +657,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2018-06-01",
             "name": "[concat(variables('imageVmName'),'/nvidia-grid')]",
-            "condition": "[equals(variables('isNsv4'),false())]",
+            "condition": "[and(equals(variables('isNsv4'),false()), parameters('deployImageVM'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('imageVmName'), 'installcustomscript')]"
@@ -673,7 +675,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2018-06-01",
             "name": "[concat(variables('imageVmName'),'/installAMDDriver')]",
-            "condition": "[equals(variables('isNsv4'),true())]",
+            "condition": "[and(variables('isNsv4'), parameters('deployImageVM'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('imageVmName'), 'installcustomscript')]"
