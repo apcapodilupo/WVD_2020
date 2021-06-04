@@ -484,7 +484,8 @@
             "name": "[concat(variables('imageVmName'), '-nic')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "NSG-linkedTemplate"
+                "NSG-linkedTemplate",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
             ],
             "tags": "[parameters('networkInterfaceTags')]",
             "properties": {
