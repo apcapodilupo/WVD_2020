@@ -561,8 +561,6 @@
                 "[concat('Microsoft.Network/networkInterfaces/', 'imageVM-nic')]",
                 "rdsh-dsc-loop",
                 "fslogix-profiles-loop"
-
-
             ],
             "properties": {
                 "hardwareProfile": {
