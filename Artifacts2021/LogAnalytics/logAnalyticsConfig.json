@@ -430,36 +430,8 @@
                 "eventLogName": "[variables('evtObj')[copyIndex()].name]",
                 "eventTypes": "[variables('evtObj')[copyIndex()].types]"
             }
-        },
-        {
-            "apiVersion": "2018-10-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), variables('vmInitialNumber')), '/', 'installOMSAgent')]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[concat('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]",
-                "eventscopy"
-            ],
-            "copy": {
-                "name": "vmextensioncopy",
-                "count": "[parameters('rdshNumberOfInstances')]"
-            },
-            "properties": {
-                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                "type": "MicrosoftMonitoringAgent",
-                "typeHandlerVersion": "1.0",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "workspaceId": "[reference(variables('workspaceId'), '2017-03-15-preview').customerId]"
-                },
-                "protectedSettings": {
-                    "workspaceKey": "[listKeys(variables('workspaceId'), '2015-11-01-preview').primarySharedKey]"
-                }
-            }
         }
         
-        
-
     ]
     
 }
