@@ -232,7 +232,6 @@
             "defaultValue": "Yes",
             "type": "string"
         },
-
         "enableAutoShutdown": {
             "defaultValue": false,
             "type": "bool"
@@ -634,7 +633,7 @@
                     "time": "[parameters('autoShutdownTime')]"
                 },
                 "timeZoneId": "[parameters('autoShutdownTimeZone')]",
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('rdshPrefix'))]",
+                "targetResourceId": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')))]",
                 "notificationSettings": {
                     "status": "Disabled",
                     "notificationLocale": "en",
