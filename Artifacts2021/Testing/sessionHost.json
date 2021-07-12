@@ -386,6 +386,32 @@
                 "licenseType": "Windows_Client"
 
             },
+            "resources":[
+                {
+            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'setAutoShutdown')]",
+            "type": "Microsoft.DevTestLab/schedules",
+            "condition": "[parameters('EnableAutoShutdown')]",
+            "apiVersion": "2018-09-15",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "fslogix-profiles-loop"
+            ],
+            "properties": {
+                "status": "[variables('autoShutdownStatus')]",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber'))))]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "notificationLocale": "en",
+                    "timeInMinutes": "30"
+                }
+            }
+        }
+            ],
             "copy": {
                 "name": "rdsh-vm-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
@@ -616,35 +642,7 @@
                     "commandToExecute": "[variables('commandToExecute')]"
                 }
             }
-        },
-        {
-            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'setAutoShutdown')]",
-            "type": "Microsoft.DevTestLab/schedules",
-            "condition": "[parameters('EnableAutoShutdown')]",
-            "apiVersion": "2018-09-15",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "fslogix-profiles-loop"
-            ],
-            "properties": {
-                "status": "[variables('autoShutdownStatus')]",
-                "taskType": "ComputeVmShutdownTask",
-                "dailyRecurrence": {
-                    "time": "[parameters('autoShutdownTime')]"
-                },
-                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber'))))]",
-                "notificationSettings": {
-                    "status": "Disabled",
-                    "notificationLocale": "en",
-                    "timeInMinutes": "30"
-                }
-            },
-            "copy": {
-                "name": "rdsh-auto-shutdown-loop",
-                "count": "[parameters('rdshNumberOfInstances')]"
-            }
-
         }
+        
     ]
 } 
