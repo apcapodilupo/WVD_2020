@@ -231,6 +231,17 @@
         "installTeams": {
             "defaultValue": "Yes",
             "type": "string"
+        },
+
+        "enableAutoShutdown": {
+            "defaultValue": false,
+            "type": "bool"
+        },
+        "autoShutdownTime": {
+            "type": "String"
+        },
+        "autoShutdownTimeZone": {
+            "type": "String"
         }
     },
     "variables": {
@@ -247,7 +258,8 @@
         "publicIpAddress": { "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]" },
         "location": "[resourceGroup().location]",
         "nsgId": "[if(parameters('createNetworkSecurityGroup'), resourceId('Microsoft.Network/networkSecurityGroups', variables('newNsgName')), parameters('networkSecurityGroupId'))]",
-        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File customScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'),' ', parameters('installTeams'))]"
+        "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File customScript.ps1', ' ', parameters('storageAccountName'), ' ', variables('ResourceGroupName'), ' ', parameters('administratorAccountUsername'), ' ', parameters('administratorAccountPassword'), ' ', variables('subscriptionID'),' ', parameters('installTeams'))]",
+        "autoShutdownStatus": "[if(parameters('enableAutoShutdown'), 'Enabled', 'Disabled')]"
 
     },
     "resources": [
@@ -607,24 +619,25 @@
             }
         },
         {
-            "name": "[concat('shutdown-computevm-', parameters('rdshPrefix'))]",
+            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'setAutoShutdown')]",
             "type": "Microsoft.DevTestLab/schedules",
+            "condition": "[parameters('EnableAutoShutdown')]",
             "apiVersion": "2018-09-15",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "fslogix-profiles-loop"
             ],
             "properties": {
-                "status": "[parameters('autoShutdownStatus')]",
+                "status": "[variables('autoShutdownStatus')]",
                 "taskType": "ComputeVmShutdownTask",
                 "dailyRecurrence": {
                     "time": "[parameters('autoShutdownTime')]"
                 },
                 "timeZoneId": "[parameters('autoShutdownTimeZone')]",
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('rdshPrefix'))]",
                 "notificationSettings": {
-                    "status": "[parameters('autoShutdownNotificationStatus')]",
-                    "notificationLocale": "[parameters('autoShutdownNotificationLocale')]",
+                    "status": "Disabled",
+                    "notificationLocale": "en",
                     "timeInMinutes": "30"
                 }
             },
@@ -634,11 +647,5 @@
             }
 
         }
-    ],
-    "outputs": {
-        "adminUsername": {
-            "type": "string",
-            "value": "[parameters('adminUsername')]"
-        }
-    }
-} ], "outputs": {} }
+    ]
+} 
