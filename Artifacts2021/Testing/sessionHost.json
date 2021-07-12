@@ -373,6 +373,7 @@
                     }
                 },
                 "licenseType": "Windows_Client"
+
             },
             "copy": {
                 "name": "rdsh-vm-loop",
@@ -604,7 +605,40 @@
                     "commandToExecute": "[variables('commandToExecute')]"
                 }
             }
+        },
+        {
+            "name": "[concat('shutdown-computevm-', parameters('rdshPrefix'))]",
+            "type": "Microsoft.DevTestLab/schedules",
+            "apiVersion": "2018-09-15",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "fslogix-profiles-loop"
+            ],
+            "properties": {
+                "status": "[parameters('autoShutdownStatus')]",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
+                "notificationSettings": {
+                    "status": "[parameters('autoShutdownNotificationStatus')]",
+                    "notificationLocale": "[parameters('autoShutdownNotificationLocale')]",
+                    "timeInMinutes": "30"
+                }
+            },
+            "copy": {
+                "name": "rdsh-auto-shutdown-loop",
+                "count": "[parameters('rdshNumberOfInstances')]"
+            }
+
         }
     ],
-    "outputs": {}
-}
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        }
+    }
+} ], "outputs": {} }
