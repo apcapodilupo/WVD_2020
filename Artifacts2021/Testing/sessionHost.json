@@ -633,7 +633,7 @@
                     "time": "[parameters('autoShutdownTime')]"
                 },
                 "timeZoneId": "[parameters('autoShutdownTimeZone')]",
-                "targetResourceId": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')))]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber'))))]",
                 "notificationSettings": {
                     "status": "Disabled",
                     "notificationLocale": "en",
