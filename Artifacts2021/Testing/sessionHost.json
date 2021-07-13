@@ -386,31 +386,6 @@
                 "licenseType": "Windows_Client"
 
             },
-            "resources": [
-                {
-                    "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'setAutoShutdown')]",
-                    "type": "Microsoft.DevTestLab/schedules",
-                    "condition": "[parameters('EnableAutoShutdown')]",
-                    "apiVersion": "2016-05-15",
-                    "location": "[parameters('location')]",
-                    "dependsOn": [
-                        "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')))]"
-                    ],
-                    "properties": {
-                        "status": "[variables('autoShutdownStatus')]",
-                        "taskType": "ComputeVmShutdownTask",
-                        "dailyRecurrence": {
-                            "time": "[parameters('autoShutdownTime')]"
-                        },
-                        "timeZoneId": "[parameters('autoShutdownTimeZone')]",
-                        "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber'))))]",
-                        "notificationSettings": {
-                            "status": "Disabled",
-                            "timeInMinutes": "30"
-                        }
-                    }
-                }
-            ],
             "copy": {
                 "name": "rdsh-vm-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
@@ -473,34 +448,33 @@
             }
         },
         {
-            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'installcustomscript')]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "apiVersion": "2015-06-15",
+            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'setAutoShutdown')]",
+            "type": "Microsoft.DevTestLab/schedules",
+            "condition": "[parameters('EnableAutoShutdown')]",
+            "apiVersion": "2018-09-15",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "rdsh-dsc-loop"
+                "fslogix-profiles-loop"
             ],
             "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.9",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Artifacts2021/Scripts/customScript.ps1"
-                    ]
+                "status": "[variables('autoShutdownStatus')]",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                    "time": "[parameters('autoShutdownTime')]"
                 },
-                "protectedSettings": {
-                    "commandToExecute": "[variables('commandToExecute')]"
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber'))))]",
+                "notificationSettings": {
+                    "status": "Disabled",
+                    "timeInMinutes": "30"
                 }
             },
             "copy": {
-                "name": "fslogix-profiles-loop",
+                "name": "auto-shutdown-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
             }
-        },
 
-
+        },   
         {
             "name": "[variables('publicIpAddressName')]",
             "type": "Microsoft.Network/publicIpAddresses",
@@ -642,6 +616,7 @@
                 }
             }
         }
+        
 
     ]
 }
