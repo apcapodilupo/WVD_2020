@@ -448,6 +448,33 @@
             }
         },
         {
+            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'installcustomscript')]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "rdsh-dsc-loop"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.9",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/apcapodilupo/WVD_2020/main/Artifacts2021/Scripts/customScript.ps1"
+                    ]
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[variables('commandToExecute')]"
+                }
+            },
+            "copy": {
+                "name": "fslogix-profiles-loop",
+                "count": "[parameters('rdshNumberOfInstances')]"
+            }
+        },
+{
             "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')))]",
             "type": "Microsoft.DevTestLab/schedules",
             "condition": "[parameters('EnableAutoShutdown')]",
@@ -473,8 +500,7 @@
                 "name": "auto-shutdown-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
             }
-
-        },   
+        },
         {
             "name": "[variables('publicIpAddressName')]",
             "type": "Microsoft.Network/publicIpAddresses",
