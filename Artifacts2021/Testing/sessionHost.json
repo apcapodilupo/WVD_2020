@@ -448,7 +448,7 @@
             }
         },
         {
-            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')), '/', 'setAutoShutdown')]",
+            "name": "[concat(parameters('rdshPrefix'), add(copyindex(), parameters('vmInitialNumber')))]",
             "type": "Microsoft.DevTestLab/schedules",
             "condition": "[parameters('EnableAutoShutdown')]",
             "apiVersion": "2018-09-15",
